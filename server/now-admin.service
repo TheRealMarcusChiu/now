@@ -23,7 +23,7 @@ Wants=network-online.target
 Type=simple
 User=root
 WorkingDirectory=/root/now
-ExecStart=/usr/bin/node /root/now/server/server.mjs
+ExecStart=/root/.nvm/versions/node/v24.16.0/bin/node /root/now/server/server.mjs
 
 # --- config ---
 Environment=PORT=9007

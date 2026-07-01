@@ -9,7 +9,9 @@ auto-filled date + optional description, and a daily Apple Health summary.
 1. Xcode → New Project → iOS App → name **LifeTracker**, interface SwiftUI, language Swift.
 2. Delete the generated `ContentView.swift` / `LifeTrackerApp.swift`, then drag every
    `.swift` file from this folder into the project.
-3. Minimum deployment target: **iOS 16**.
+3. Replace the generated `Assets.xcassets` with the one in this folder (it contains
+   the gold live-ping app icon — a single 1024px universal icon, Xcode 14+ style).
+4. Minimum deployment target: **iOS 16**.
 
 ## Capabilities & Info.plist
 

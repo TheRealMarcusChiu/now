@@ -3,6 +3,21 @@
   "name": "Life Tracker — site time logger",
   "version": "1.0.0",
   "description": "Logs which sites you're on and for how long (plus YouTube watches) to your Life Tracker server.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Life Tracker — logging"
+  },
   "permissions": ["tabs", "storage", "idle", "alarms"],
   "host_permissions": ["<all_urls>"],
   "background": { "service_worker": "background.js" },

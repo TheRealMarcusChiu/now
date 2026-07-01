@@ -1,0 +1,34 @@
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+desktop.ini
+*.thumbnail
+
+# --- editors ---
+.vscode/
+.idea/
+*.swp
+
+# --- Node (server is zero-dependency, but just in case) ---
+node_modules/
+npm-debug.log*
+*.log
+
+# --- secrets / local config ---
+.env
+.env.*
+
+# --- Xcode / iOS build artifacts ---
+ios/**/xcuserdata/
+ios/**/*.xcuserstate
+ios/**/DerivedData/
+ios/**/build/
+ios/**/*.ipa
+ios/**/*.dSYM.zip
+
+# --- design reference upload (not part of the site) ---
+uploads/
+
+# NOTE: data/ and media/ are intentionally NOT ignored —
+# they ARE the append-only log the website serves.
+

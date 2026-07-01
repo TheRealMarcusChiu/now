@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Life Tracker — site time logger",
+  "version": "1.0.0",
+  "description": "Logs which sites you're on and for how long (plus YouTube watches) to your Life Tracker server.",
+  "permissions": ["tabs", "storage", "idle", "alarms"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["*://www.youtube.com/*"],
+      "js": ["content-youtube.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_page": "options.html"
+}

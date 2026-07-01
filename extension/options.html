@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Life Tracker — options</title>
+<style>
+  body { background: #0f0c09; color: #ece1cf; font-family: 'JetBrains Mono', ui-monospace, monospace; padding: 40px; max-width: 560px; }
+  h1 { font-family: Georgia, serif; font-style: italic; font-weight: 500; font-size: 28px; margin: 0 0 6px; }
+  p { color: #8c8170; font-size: 12.5px; line-height: 1.8; margin: 0 0 26px; }
+  label { display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; margin-bottom: 9px; }
+  input { width: 100%; background: #14110b; border: 1px solid #2a2218; border-radius: 6px; color: #ece1cf; font-size: 14px; padding: 11px 13px; outline: none; font-family: inherit; box-sizing: border-box; }
+  input:focus { border-color: #d8a942; }
+  button { margin-top: 16px; background: #d8a942; color: #0f0c09; border: none; border-radius: 6px; padding: 11px 22px; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; font-family: inherit; }
+  #status { margin-left: 12px; font-size: 12px; color: #8faa6e; }
+  #test { background: transparent; border: 1px solid #3a2f1a; color: #d8a942; margin-right: 4px; }
+  #test:hover { border-color: #d8a942; color: #ece1cf; }
+  #teststatus { margin-left: 12px; font-size: 12px; }
+  .ok { color: #8faa6e; } .bad { color: #e7b0a4; } .dim { color: #8c8170; }
+</style>
+</head>
+<body>
+  <h1>Life Tracker</h1>
+  <p>Where should logged events be sent? This is the Node server from your repo (<code>node server/server.mjs</code>).</p>
+  <label for="endpoint">Server endpoint</label>
+  <input id="endpoint" type="text" placeholder="http://127.0.0.1:8787">
+  <button id="test">Test connection</button><span id="teststatus"></span>
+  <br>
+  <button id="save">Save</button><span id="status"></span>
+  <script src="options.js"></script>
+</body>
+</html>

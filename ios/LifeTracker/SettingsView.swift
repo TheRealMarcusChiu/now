@@ -11,7 +11,7 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section {
-                    TextField("http://your-server:8787", text: $endpoint)
+                    TextField("https://git.now.lan", text: $endpoint)
                         .font(Theme.mono(14))
                         .autocapitalization(.none)
                         .keyboardType(.URL)

@@ -3,7 +3,7 @@ const status = document.getElementById('status');
 const testStatus = document.getElementById('teststatus');
 
 chrome.storage.local.get('endpoint').then(({ endpoint }) => {
-  input.value = endpoint || 'http://127.0.0.1:8787';
+  input.value = endpoint || 'https://git.now.lan';
 });
 
 function endpointValue() {

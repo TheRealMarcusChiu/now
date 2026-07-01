@@ -216,24 +216,27 @@
       </sc-for>
     </section>
   </sc-for>
+  <sc-if value="{{ hasMoreDays }}" hint-placeholder-val="{{ false }}">
+    <button type="button" onClick="{{ loadMore }}" style="margin-top: 36px; width: 100%; padding: 17px; background: transparent; border: 1px dashed #2a2218; border-radius: 8px; cursor: pointer; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #8c8170; transition: all 0.18s ease;" style-hover="border-color: #d8a942; color: #d8a942;">{{ moreLabel }}</button>
+  </sc-if>
   </div>
 
   <!-- ===== FOOTER ===== -->
   <footer style="margin-top: 96px; padding-top: 30px; border-top: 1px solid #221c14; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;">
-    <div style="font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #5f574a;">© 2026 Marcus Chiu · append-only since June 2026</div>
+    <div style="font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #5f574a;">© 2026 Marcus Chiu · append-only since 2024</div>
     <a href="http://www.marcuschiu.com" style="font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #b78f3a; text-decoration: none;" style-hover="color: #d8a942;">← www.marcuschiu.com</a>
   </footer>
 
 </div>
 
-<!-- ===== DAY RAIL (fast scroll) ===== -->
+<!-- ===== MONTH RAIL (fast scroll across years) ===== -->
 <nav class="dayrail" style="position: fixed; right: 22px; top: 50%; transform: translateY(-50%); z-index: 40; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; max-height: 86vh; overflow-y: auto; padding: 6px 2px;">
-  <sc-for list="{{ railDays }}" as="r" hint-placeholder-count="8">
+  <sc-for list="{{ railMonths }}" as="r" hint-placeholder-count="8">
     <div style="display: flex; flex-direction: column; align-items: flex-end;">
-      <sc-if value="{{ r.showMonth }}" hint-placeholder-val="{{ false }}">
-        <span style="font-size: 9px; letter-spacing: 0.24em; color: #b78f3a; text-transform: uppercase; padding: 7px 4px 3px;">{{ r.month }}</span>
+      <sc-if value="{{ r.showYear }}" hint-placeholder-val="{{ false }}">
+        <span style="font-size: 9px; letter-spacing: 0.24em; color: #b78f3a; text-transform: uppercase; padding: 8px 4px 3px;">{{ r.year }}</span>
       </sc-if>
-      <button type="button" title="{{ r.full }}" onClick="{{ r.onClick }}" style="{{ r.style }}" style-hover="color: #ece1cf;">{{ r.dnum }}</button>
+      <button type="button" title="{{ r.full }}" onClick="{{ r.onClick }}" style="{{ r.style }}" style-hover="color: #ece1cf;">{{ r.label }}</button>
     </div>
   </sc-for>
 </nav>
@@ -296,7 +299,7 @@
       <h2 style="font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: 27px; letter-spacing: -0.01em;">Server</h2>
       <div style="margin-top: 8px; font-size: 12px; line-height: 1.7; color: #8c8170;">Where new and edited logs are sent. Leave empty to use the same origin the site is served from.</div>
       <label style="display: flex; flex-direction: column; gap: 7px; margin-top: 20px; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170;">Endpoint
-        <input type="text" value="{{ endpointVal }}" onChange="{{ onEndpoint }}" placeholder="http://127.0.0.1:8787" style="width: 100%; background: #14110b; border: 1px solid #2a2218; border-radius: 6px; color: #ece1cf; font-size: 13px; padding: 10px 12px; outline: none; font-family: 'JetBrains Mono', monospace; transition: border-color 0.2s ease;" style-focus="border-color: #d8a942;">
+        <input type="text" value="{{ endpointVal }}" onChange="{{ onEndpoint }}" placeholder="https://git.now.lan" style="width: 100%; background: #14110b; border: 1px solid #2a2218; border-radius: 6px; color: #ece1cf; font-size: 13px; padding: 10px 12px; outline: none; font-family: 'JetBrains Mono', monospace; transition: border-color 0.2s ease;" style-focus="border-color: #d8a942;">
       </label>
       <div style="margin-top: 14px; display: flex; align-items: center; gap: 12px;">
         <button type="button" onClick="{{ testEndpoint }}" style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 10px 16px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #3a2f1a; color: #d8a942;" style-hover="border-color: #d8a942; color: #ece1cf;">Test connection</button>
@@ -315,7 +318,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;liveWindowMins&quot;: {&quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 15, &quot;min&quot;: 1, &quot;max&quot;: 120, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Behavior&quot;, &quot;description&quot;: &quot;How recent the latest event must be to show the pulsing NOW state&quot;}, &quot;autoEmbedYouTube&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;, &quot;description&quot;: &quot;Embed YouTube players inline instead of click-to-play thumbnails&quot;}, &quot;showMap&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;, &quot;description&quot;: &quot;Show the Places map + heatmap section&quot;}}">
 class Component extends DCLogic {
-  state = { events: [], loaded: false, filter: 'all', search: '', sortDir: 'desc', filterOpen: false, sortOpen: false, nowTick: Date.now(), heatOn: true, placeRange: '31', placeStart: '', placeEnd: '', ytOpen: {}, activeDay: null, admin: false, editor: null, settingsOpen: false, endpoint: (typeof localStorage !== 'undefined' && localStorage.getItem('lt-endpoint')) || '', testStatus: null };
+  state = { events: [], loaded: false, filter: 'all', search: '', sortDir: 'desc', filterOpen: false, sortOpen: false, nowTick: Date.now(), heatOn: true, placeRange: '31', placeStart: '', placeEnd: '', ytOpen: {}, activeDay: null, admin: false, editor: null, settingsOpen: false, endpoint: (typeof localStorage !== 'undefined' && localStorage.getItem('lt-endpoint')) || '', testStatus: null, visibleDays: 21 };
 
   componentDidMount() {
     // events.js loads async from <helmet> — poll until it lands
@@ -325,7 +328,15 @@ class Component extends DCLogic {
       const ev = window.__EVENTS;
       if ((ev && ev.length) || tries > 40) {
         clearInterval(this._poll);
-        const raw = (ev || []).slice().map((e, i) => Object.assign({ __uid: i }, e));
+        // defensive dedupe: if the data script executed twice, drop exact repeats
+        const seen = new Set();
+        const deduped = (ev || []).filter(e => {
+          const k = JSON.stringify(e);
+          if (seen.has(k)) return false;
+          seen.add(k);
+          return true;
+        });
+        const raw = deduped.map((e, i) => Object.assign({ __uid: i }, e));
         // apply append-only revisions (admin edits): {type:'revision', target, data}
         const revs = raw.filter(e => e.type === 'revision');
         const events = raw.filter(e => e.type !== 'revision');
@@ -445,7 +456,7 @@ class Component extends DCLogic {
     const ep = (this.state.endpoint || '').trim().replace(/\/$/, '');
     if (ep) return ep;
     if (location.protocol.indexOf('http') === 0) return '';
-    return 'http://127.0.0.1:8787';
+    return 'https://git.now.lan';
   }
 
   postJson(path, body) {
@@ -627,36 +638,49 @@ class Component extends DCLogic {
       if (!dayMap.has(k)) dayMap.set(k, []);
       dayMap.get(k).push(e);
     }
-    const days = [];
+    const daysAll = [];
     for (const [key, evs] of dayMap) {
       const d = new Date(evs[0].ts);
       const online = evs.filter(e => e.type === 'web' || e.type === 'youtube').reduce((a, e) => a + (e.secs || 0), 0);
-      days.push({
+      daysAll.push({
         key,
         title: this.dayTitle(d),
         meta: evs.length + ' events' + (online ? ' · ' + this.fmtDur(online) + ' online' : ''),
-        events: evs.map(e => this.viewEvent(e, autoEmbed)),
+        evs,
       });
     }
+    // lazy rendering: only materialize the visible window of days
+    const days = daysAll.slice(0, S.visibleDays).map(day => ({
+      key: day.key, title: day.title, meta: day.meta,
+      events: day.evs.map(e => this.viewEvent(e, autoEmbed)),
+    }));
 
-    // ---- day rail ----
-    let lastMonth = null;
-    const railDays = days.map(day => {
-      const d = new Date(day.events[0].ts0);
-      const mon = d.toLocaleDateString(undefined, { month: 'short' });
-      const showMonth = mon !== lastMonth; lastMonth = mon;
-      const on = S.activeDay === day.key;
-      return {
-        dnum: String(d.getDate()).padStart(2, '0'),
-        month: mon, showMonth,
-        full: day.title,
+    // ---- month rail (fast scroll across years) ----
+    let lastYear = null;
+    const seenMonths = new Set();
+    const railMonths = [];
+    daysAll.forEach((day, idx) => {
+      const mk = day.key.slice(0, 7);
+      if (seenMonths.has(mk)) return;
+      seenMonths.add(mk);
+      const d = new Date(day.evs[0].ts);
+      const yr = String(d.getFullYear());
+      const showYear = yr !== lastYear; lastYear = yr;
+      const on = !!S.activeDay && S.activeDay.slice(0, 7) === mk;
+      railMonths.push({
+        label: d.toLocaleDateString(undefined, { month: 'short' }),
+        year: yr, showYear,
+        full: d.toLocaleDateString(undefined, { month: 'long', year: 'numeric' }),
         onClick: () => {
-          const el = document.getElementById('day-' + day.key);
-          if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 66, behavior: 'smooth' });
+          if (idx >= this.state.visibleDays) {
+            this.setState({ visibleDays: idx + 15 }, () => setTimeout(() => this.jumpToDay(day.key), 80));
+          } else {
+            this.jumpToDay(day.key);
+          }
         },
-        style: 'background: transparent; border: none; cursor: pointer; padding: 2px 4px; font-size: 10px; line-height: 1.5; letter-spacing: 0.08em; transition: color 0.15s ease; ' +
+        style: 'background: transparent; border: none; cursor: pointer; padding: 2px 4px; font-size: 10px; line-height: 1.6; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.15s ease; ' +
           (on ? 'color: #d8a942; font-weight: 600;' : 'color: #463f33;'),
-      };
+      });
     });
 
     return {
@@ -679,9 +703,12 @@ class Component extends DCLogic {
       sortOpen: S.sortOpen,
       anyOpen: S.filterOpen || S.sortOpen,
       closeMenus: () => this.setState({ filterOpen: false, sortOpen: false }),
-      countLabel: filtered.length + ' events · ' + days.length + ' days',
+      countLabel: filtered.length + ' events · ' + daysAll.length + ' days',
       ...this.adminVals(),
-      days, railDays,
+      days, railMonths,
+      hasMoreDays: daysAll.length > days.length,
+      moreLabel: 'Load earlier — ' + (daysAll.length - days.length) + ' more days',
+      loadMore: () => this.setState(s => ({ visibleDays: s.visibleDays + 60 })),
       placeRangeBtns: [['7', '7d'], ['31', '31d'], ['90', '90d'], ['365', 'Year'], ['all', 'All'], ['custom', 'Custom']].map(([r, label], i, arr) => ({
         label,
         onClick: () => this.setState({ placeRange: r }, () => this.rebuildPlaceLayers()),
@@ -805,13 +832,18 @@ class Component extends DCLogic {
     };
   }
 
+  jumpToDay(key) {
+    const el = document.getElementById('day-' + key);
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 66, behavior: 'smooth' });
+  }
+
   dayKey(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
 
   dayTitle(d) {
     const today = this.dayKey(new Date());
     const yest = this.dayKey(new Date(Date.now() - 86400000));
     const k = this.dayKey(d);
-    const nice = d.toLocaleDateString(undefined, { month: 'long', day: 'numeric' });
+    const nice = d.toLocaleDateString(undefined, { month: 'long', day: 'numeric' }) + (d.getFullYear() !== new Date().getFullYear() ? ', ' + d.getFullYear() : '');
     if (k === today) return 'Today — ' + nice;
     if (k === yest) return 'Yesterday — ' + nice;
     return d.toLocaleDateString(undefined, { weekday: 'long' }) + ' — ' + nice;

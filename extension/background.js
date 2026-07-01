@@ -2,7 +2,7 @@
 // Tracks the active tab: when you switch tabs/windows or go idle, the finished
 // session (domain, title, url, seconds) is queued and flushed to the server.
 
-const DEFAULT_ENDPOINT = 'http://127.0.0.1:8787';
+const DEFAULT_ENDPOINT = 'https://git.now.lan';
 const MIN_SECONDS = 5;      // ignore blips shorter than this
 const FLUSH_EVERY_MIN = 0.5;
 

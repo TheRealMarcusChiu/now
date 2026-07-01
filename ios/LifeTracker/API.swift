@@ -6,7 +6,7 @@ import CoreLocation
 final class API: ObservableObject {
     static let shared = API()
 
-    @AppStorage_Compat("endpoint") var endpoint: String = "http://127.0.0.1:8787"
+    @AppStorage_Compat("endpoint") var endpoint: String = "https://git.now.lan"
     @Published var pendingCount: Int = 0
     @Published var lastError: String?
 

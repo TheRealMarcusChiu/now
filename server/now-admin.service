@@ -26,10 +26,17 @@ WorkingDirectory=/root/now
 ExecStart=/usr/bin/node /root/now/server/server.mjs
 
 # --- config ---
-Environment=PORT=8787
+Environment=PORT=9007
 Environment=GIT_DEBOUNCE_SECS=30
 # Uncomment to disable auto commit+push:
 # Environment=GIT_SYNC=off
+
+# --- networking ---
+# The server binds 0.0.0.0:9007, so remote devices (iPhone app, Chrome extension
+# on other machines, git push over SSH/HTTPS) can connect in and out. No socket
+# or address-family restrictions are applied here — if it's unreachable, check
+# the container/host firewall (e.g. `ufw allow 9007`) and Proxmox network config.
+IPAccounting=no
 
 # --- resilience ---
 Restart=always

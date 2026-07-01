@@ -31,7 +31,8 @@ const PORT = process.env.PORT || 8787;
 const EVJS_HEADER =
   '// APPEND-ONLY event log. The server appends exactly one __logEvent(...) line per event.\n' +
   '// Same data as events.jsonl, wrapped so the site works over file:// (no fetch needed).\n' +
-  'window.__EVENTS = window.__EVENTS || [];\n' +
+  '// The reset (not ||) is deliberate: if the script executes twice, it must not double.\n' +
+  'window.__EVENTS = [];\n' +
   'window.__logEvent = function (e) { window.__EVENTS.push(e); };\n';
 
 fs.mkdirSync(DATA, { recursive: true });

@@ -4648,3 +4648,5 @@ __logEvent({"secs":157,"source":"chrome","title":"10 Questions with Mike Winger 
 __logEvent({"domain":"youtube.com","secs":5,"source":"chrome","title":"(1) 10 Questions with Mike Winger (Episode 5) - YouTube","ts":"2026-07-01T22:37:19.720Z","type":"web","url":"https://www.youtube.com/watch?v=hGLj9f6nRCs"});
 __logEvent({"domain":"claude.ai","secs":7,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T22:37:24.918Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a?file=index.html"});
 __logEvent({"domain":"claude.ai","secs":149,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T22:37:31.788Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"});
+__logEvent({"domain":"adguard.lan","secs":9,"source":"chrome","title":"AdGuard Home","ts":"2026-07-01T22:42:07.838Z","type":"web","url":"https://adguard.lan/"});
+__logEvent({"domain":"adguard.lan","secs":18,"source":"chrome","title":"AdGuard Home","ts":"2026-07-01T22:42:17.271Z","type":"web","url":"https://adguard.lan/"});

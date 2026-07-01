@@ -1,0 +1,46 @@
+# Life Tracker admin server — systemd unit for an Ubuntu LXC (Proxmox).
+# Assumes the repo lives at /root/now (so this file is /root/now/server/now-admin.service).
+#
+# Install:
+#   ln -s /root/now/server/now-admin.service /etc/systemd/system/now-admin.service
+#   systemctl daemon-reload
+#   systemctl enable --now now-admin
+#
+# Check:
+#   systemctl status now-admin
+#   journalctl -u now-admin -f
+#
+# Note: `git push` must work non-interactively as root in /root/now
+# (e.g. an SSH deploy key or a PAT in the remote URL) or set GIT_SYNC=off below.
+
+[Unit]
+Description=Life Tracker append-only log server (now.marcuschiu.com)
+Documentation=file:/root/now/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/now
+ExecStart=/usr/bin/node /root/now/server/server.mjs
+
+# --- config ---
+Environment=PORT=8787
+Environment=GIT_DEBOUNCE_SECS=30
+# Uncomment to disable auto commit+push:
+# Environment=GIT_SYNC=off
+
+# --- resilience ---
+Restart=always
+RestartSec=5
+# journald captures stdout/stderr
+StandardOutput=journal
+StandardError=journal
+
+# --- modest hardening (keep write access to the repo for logs/media/git) ---
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

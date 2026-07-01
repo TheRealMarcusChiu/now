@@ -43,7 +43,7 @@ __logEvent({"ts":"2026-06-03T17:00:00.000Z","type":"youtube","videoId":"jNQXAC9I
 __logEvent({"ts":"2026-06-03T17:07:43.574Z","type":"web","domain":"news.ycombinator.com","title":"Hacker News","url":"https://news.ycombinator.com/","secs":953,"source":"chrome"});
 __logEvent({"ts":"2026-06-03T17:31:01.491Z","type":"music","track":"Holocene","artist":"Bon Iver","secs":261,"source":"apple-music"});
 __logEvent({"ts":"2026-06-03T18:00:00.000Z","type":"place","name":"The office (SoMa)","lat":37.7817,"lng":-122.3969,"kind":"work","secs":2400,"source":"iphone"});
-__logEvent({"ts":"2026-06-03T18:00:00.000Z","type":"photo","media":"media/walk-sunset.jpg","caption":"Golden hour on the way back from the park","source":"iphone-share"});
+__logEvent({"ts":"2026-06-03T18:00:00.000Z","type":"photo","media":"media/2026-06-03_18-00-00.jpg","caption":"Golden hour on the way back from the park","source":"iphone-share"});
 __logEvent({"ts":"2026-06-03T18:16:23.932Z","type":"web","domain":"lobste.rs","title":"Lobsters","url":"https://lobste.rs/","secs":2493,"source":"chrome"});
 __logEvent({"ts":"2026-06-03T20:04:57.083Z","type":"web","domain":"en.wikipedia.org","title":"Quantified self — Wikipedia","url":"https://en.wikipedia.org/","secs":77,"source":"chrome"});
 __logEvent({"ts":"2026-06-03T20:30:00.000Z","type":"screen","app":"Photos","mins":7,"source":"ios-screentime"});
@@ -102,7 +102,7 @@ __logEvent({"ts":"2026-06-07T14:50:29.091Z","type":"music","track":"Holocene","a
 __logEvent({"ts":"2026-06-07T15:08:42.188Z","type":"web","domain":"lobste.rs","title":"Lobsters","url":"https://lobste.rs/","secs":2749,"source":"chrome"});
 __logEvent({"ts":"2026-06-07T17:13:08.165Z","type":"web","domain":"leafletjs.com","title":"Leaflet — a JavaScript library for maps","url":"https://leafletjs.com/","secs":2218,"source":"chrome"});
 __logEvent({"ts":"2026-06-07T18:18:22.318Z","type":"music","track":"Nude","artist":"Radiohead","secs":306,"source":"apple-music"});
-__logEvent({"ts":"2026-06-07T20:00:00.000Z","type":"photo","media":"media/coffee-shop.jpg","caption":"Flat white, corner seat, PR reviews","source":"iphone-share"});
+__logEvent({"ts":"2026-06-07T20:00:00.000Z","type":"photo","media":"media/2026-06-07_20-00-00.jpg","caption":"Flat white, corner seat, PR reviews","source":"iphone-share"});
 __logEvent({"ts":"2026-06-07T20:30:00.000Z","type":"screen","app":"Safari","mins":11,"source":"ios-screentime"});
 __logEvent({"ts":"2026-06-07T20:50:00.000Z","type":"screen","app":"Safari","mins":16,"source":"ios-screentime"});
 __logEvent({"ts":"2026-06-07T21:00:00.000Z","type":"git","repo":"marcuschiu/marcuschiu.github.io","message":"post: on logging everything","sha":"9b4c56f","source":"github"});
@@ -157,7 +157,7 @@ __logEvent({"ts":"2026-06-11T14:33:28.381Z","type":"music","track":"Nude","artis
 __logEvent({"ts":"2026-06-11T14:53:57.946Z","type":"web","domain":"leafletjs.com","title":"Leaflet — a JavaScript library for maps","url":"https://leafletjs.com/","secs":967,"source":"chrome"});
 __logEvent({"ts":"2026-06-11T16:36:21.373Z","type":"web","domain":"developer.apple.com","title":"CLLocationManager | Apple Developer Docs","url":"https://developer.apple.com/","secs":1971,"source":"chrome"});
 __logEvent({"ts":"2026-06-11T18:00:00.000Z","type":"place","name":"Ocean Beach","lat":37.7594,"lng":-122.5107,"kind":"outdoors","secs":7080,"source":"iphone"});
-__logEvent({"ts":"2026-06-11T18:00:00.000Z","type":"photo","media":"media/trailhead.jpg","caption":"Mile zero. Told myself just five miles","source":"iphone-share"});
+__logEvent({"ts":"2026-06-11T18:00:00.000Z","type":"photo","media":"media/2026-06-11_18-00-00.jpg","caption":"Mile zero. Told myself just five miles","source":"iphone-share"});
 __logEvent({"ts":"2026-06-11T18:14:36.057Z","type":"web","domain":"developer.apple.com","title":"CLLocationManager | Apple Developer Docs","url":"https://developer.apple.com/","secs":2455,"source":"chrome"});
 __logEvent({"ts":"2026-06-11T20:30:00.000Z","type":"screen","app":"Messages","mins":17,"source":"ios-screentime"});
 __logEvent({"ts":"2026-06-11T20:50:00.000Z","type":"screen","app":"Mail","mins":8,"source":"ios-screentime"});
@@ -209,7 +209,7 @@ __logEvent({"ts":"2026-06-15T15:37:57.598Z","type":"web","domain":"docs.github.c
 __logEvent({"ts":"2026-06-15T16:00:00.000Z","type":"git","repo":"marcuschiu/life-tracker-ios","message":"feat: CLVisit monitoring + upload queue","sha":"a599b92","source":"github"});
 __logEvent({"ts":"2026-06-15T16:54:40.417Z","type":"web","domain":"reddit.com","title":"r/selfhosted — weekly what-are-you-hosting thread","url":"https://reddit.com/","secs":1202,"source":"chrome"});
 __logEvent({"ts":"2026-06-15T17:40:00.000Z","type":"youtube","videoId":"kJQP7kiw5Fk","title":"Luis Fonsi — Despacito ft. Daddy Yankee","url":"https://www.youtube.com/watch?v=kJQP7kiw5Fk","secs":539,"source":"chrome"});
-__logEvent({"ts":"2026-06-15T18:00:00.000Z","type":"photo","media":"media/city-night.jpg","caption":"Walked home the long way after dinner","source":"iphone-share"});
+__logEvent({"ts":"2026-06-15T18:00:00.000Z","type":"photo","media":"media/2026-06-15_18-00-00.jpg","caption":"Walked home the long way after dinner","source":"iphone-share"});
 __logEvent({"ts":"2026-06-15T18:53:41.370Z","type":"web","domain":"reddit.com","title":"r/selfhosted — weekly what-are-you-hosting thread","url":"https://reddit.com/","secs":1924,"source":"chrome"});
 __logEvent({"ts":"2026-06-15T20:03:46.200Z","type":"web","domain":"github.com","title":"marcuschiu/life-tracker: append-only activity log","url":"https://github.com/","secs":858,"source":"chrome"});
 __logEvent({"ts":"2026-06-15T20:30:00.000Z","type":"screen","app":"Photos","mins":8,"source":"ios-screentime"});
@@ -256,7 +256,7 @@ __logEvent({"ts":"2026-06-18T15:13:44.285Z","type":"music","track":"Holocene","a
 __logEvent({"ts":"2026-06-18T17:00:00.000Z","type":"youtube","videoId":"9bZkp7q19f0","title":"PSY — GANGNAM STYLE","url":"https://www.youtube.com/watch?v=9bZkp7q19f0","secs":621,"source":"chrome"});
 __logEvent({"ts":"2026-06-18T17:15:25.628Z","type":"web","domain":"github.com","title":"marcuschiu/life-tracker: append-only activity log","url":"https://github.com/","secs":2100,"source":"chrome"});
 __logEvent({"ts":"2026-06-18T17:40:00.000Z","type":"youtube","videoId":"dQw4w9WgXcQ","title":"Rick Astley — Never Gonna Give You Up","url":"https://www.youtube.com/watch?v=dQw4w9WgXcQ","secs":1124,"source":"chrome"});
-__logEvent({"ts":"2026-06-18T18:00:00.000Z","type":"audio","media":"media/voice-note-sample.wav","caption":"Idea: weight the heatmap by recency, not just count","source":"iphone"});
+__logEvent({"ts":"2026-06-18T18:00:00.000Z","type":"audio","media":"media/2026-06-18_18-00-00.wav","caption":"Idea: weight the heatmap by recency, not just count","source":"iphone"});
 __logEvent({"ts":"2026-06-18T18:50:01.287Z","type":"web","domain":"github.com","title":"marcuschiu/life-tracker: append-only activity log","url":"https://github.com/","secs":3203,"source":"chrome"});
 __logEvent({"ts":"2026-06-18T19:00:00.000Z","type":"git","repo":"marcuschiu/life-tracker","message":"fix: dedupe rapid tab switches under 5s","sha":"df15576","source":"github"});
 __logEvent({"ts":"2026-06-18T20:30:00.000Z","type":"screen","app":"Mail","mins":9,"source":"ios-screentime"});

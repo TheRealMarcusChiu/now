@@ -10,12 +10,15 @@
 //   GET  /*       — serves the static site (index.html, data/, media/) so you can
 //                   preview at http://127.0.0.1:8787 exactly as GitHub Pages will serve it.
 //
-// After the server appends, commit + push the repo and GitHub Pages updates.
-//   git add data media && git commit -m "log" && git push
+// After the server appends, it auto-commits and pushes (debounced ~30s) so
+// GitHub Pages updates itself. Disable with GIT_SYNC=off, tune with
+// GIT_DEBOUNCE_SECS=10. Requires the repo to have a remote + stored credentials
+// (test once with a manual `git push`).
 
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import { execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -39,6 +42,43 @@ if (!fs.existsSync(JSONL)) fs.writeFileSync(JSONL, '');
 // 'revision' = append-only edit from the website's admin mode: {type:'revision', target:'<ts>|<type>', data:{…}}
 const ALLOWED_TYPES = new Set(['web', 'youtube', 'music', 'git', 'health', 'screen', 'place', 'photo', 'audio', 'video', 'note', 'revision']);
 
+// ---- git auto-sync (commit + push after every append, debounced) ----
+const GIT_SYNC = process.env.GIT_SYNC !== 'off';
+const GIT_DEBOUNCE_MS = Number(process.env.GIT_DEBOUNCE_SECS || 30) * 1000;
+let gitTimer = null, gitBusy = false, gitAgain = false;
+
+function git(args) {
+  return new Promise((resolve, reject) => {
+    execFile('git', args, { cwd: ROOT }, (err, stdout, stderr) =>
+      err ? reject(new Error((stderr || err.message).trim())) : resolve(stdout));
+  });
+}
+
+function scheduleGitSync() {
+  if (!GIT_SYNC) return;
+  clearTimeout(gitTimer);
+  gitTimer = setTimeout(runGitSync, GIT_DEBOUNCE_MS); // batch bursts into one commit
+}
+
+async function runGitSync() {
+  if (gitBusy) { gitAgain = true; return; }
+  gitBusy = true;
+  try {
+    await git(['add', 'data', 'media']);
+    const staged = await git(['status', '--porcelain', 'data', 'media']);
+    if (staged.trim()) {
+      await git(['commit', '-m', 'log: ' + new Date().toISOString()]);
+      await git(['push']);
+      console.log('[git] committed & pushed');
+    }
+  } catch (err) {
+    console.warn('[git] sync failed (will retry on next log):', err.message);
+  } finally {
+    gitBusy = false;
+    if (gitAgain) { gitAgain = false; scheduleGitSync(); }
+  }
+}
+
 function appendEvents(events) {
   const clean = [];
   for (const raw of events) {
@@ -52,6 +92,7 @@ function appendEvents(events) {
   // Append-only: two synchronized appends, never a rewrite.
   fs.appendFileSync(JSONL, clean.map(e => JSON.stringify(e)).join('\n') + '\n');
   fs.appendFileSync(EVJS, clean.map(e => '__logEvent(' + JSON.stringify(e) + ');').join('\n') + '\n');
+  scheduleGitSync();
   return clean.length;
 }
 
@@ -107,8 +148,10 @@ const server = http.createServer(async (req, res) => {
       if (!SAFE_EXT.has(ext)) throw new Error('bad ext');
       if (!b.dataBase64) throw new Error('missing dataBase64');
       const ts = b.ts || new Date().toISOString();
-      const stamp = ts.replace(/[-:TZ.]/g, '').slice(0, 14);
-      const name = `${stamp}-${Math.random().toString(36).slice(2, 7)}.${ext}`;
+      // media filename IS the timestamp: 2026-07-01_15-30-22.jpg (suffix only on collision)
+      const stamp = ts.slice(0, 19).replace('T', '_').replace(/:/g, '-');
+      let name = `${stamp}.${ext}`;
+      for (let i = 2; fs.existsSync(path.join(MEDIA, name)); i++) name = `${stamp}-${i}.${ext}`;
       fs.writeFileSync(path.join(MEDIA, name), Buffer.from(b.dataBase64, 'base64'));
       const ev = { ts, type: kind, media: 'media/' + name, caption: b.caption || '', source: b.source || 'upload' };
       if (b.lat != null) { ev.lat = b.lat; ev.lng = b.lng; }
@@ -147,4 +190,5 @@ server.listen(PORT, () => {
   console.log(`  POST /log      append events (Chrome extension, scripts)`);
   console.log(`  POST /upload   media upload (iPhone app)`);
   console.log(`  GET  /events   raw JSONL`);
+  console.log(`  git sync: ${GIT_SYNC ? `on (debounce ${GIT_DEBOUNCE_MS / 1000}s)` : 'off'}`);
 });

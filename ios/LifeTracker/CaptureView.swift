@@ -14,6 +14,7 @@ struct CaptureView: View {
     @State private var showCamera = false
     @State private var sending = false
     @State private var sentAt: Date?
+    @FocusState private var captionFocused: Bool
 
     private var nowStamp: String {
         let f = DateFormatter(); f.dateFormat = "EEEE, MMM d · HH:mm"
@@ -55,6 +56,7 @@ struct CaptureView: View {
                         .padding(12)
                         .background(Theme.card, in: RoundedRectangle(cornerRadius: 6))
                         .overlay(RoundedRectangle(cornerRadius: 6).stroke(Theme.border))
+                        .focused($captionFocused)
 
                     Button {
                         guard let data = imageData else { return }
@@ -86,6 +88,17 @@ struct CaptureView: View {
             }
             .background(Theme.bg)
             .navigationTitle("Capture")
+            .scrollDismissesKeyboard(.interactively)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { captionFocused = false }
+                        .font(Theme.mono(14))
+                        .foregroundStyle(Theme.gold)
+                }
+            }
+            .contentShape(Rectangle())
+            .onTapGesture { captionFocused = false } // tap anywhere outside to dismiss
         }
         .onChange(of: pickedItem) { _, item in
             Task {

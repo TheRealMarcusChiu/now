@@ -63,6 +63,24 @@
       </div>
       <div style="margin-top: 20px; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500; color: #ece1cf; font-size: clamp(26px, 4vw, 42px); line-height: 1.12; letter-spacing: -0.01em; text-wrap: pretty;">{{ nowLine }}</div>
       <div style="margin-top: 14px; font-size: 12.5px; line-height: 1.7; color: #8c8170;">{{ nowSub }}</div>
+      <sc-if value="{{ nowEv.isImg }}" hint-placeholder-val="{{ false }}">
+        <img src="{{ nowEv.media }}" alt="{{ nowEv.title }}" loading="lazy" style="display: block; margin-top: 18px; max-width: 560px; width: 100%; border-radius: 6px; border: 1px solid #29221a;">
+      </sc-if>
+      <sc-if value="{{ nowEv.isVideoFile }}" hint-placeholder-val="{{ false }}">
+        <video controls preload="none" src="{{ nowEv.media }}" style="display: block; margin-top: 18px; max-width: 560px; width: 100%; border-radius: 6px; border: 1px solid #29221a; background: #0b0906;"></video>
+      </sc-if>
+      <sc-if value="{{ nowEv.isAudio }}" hint-placeholder-val="{{ false }}">
+        <audio controls preload="none" src="{{ nowEv.media }}" style="display: block; margin-top: 18px; width: 100%; max-width: 560px;"></audio>
+      </sc-if>
+      <sc-if value="{{ nowEv.isYtThumb }}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{ nowEv.onYt }}" style="position: relative; display: block; margin-top: 18px; width: 100%; max-width: 560px; aspect-ratio: 16 / 9; border-radius: 6px; border: 1px solid #29221a; overflow: hidden; cursor: pointer; background: #0b0906; padding: 0;" style-hover="border-color: #d8a942;">
+          <img src="https://i.ytimg.com/vi/{{ nowEv.ytId }}/hqdefault.jpg" alt="{{ nowEv.title }}" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.75;">
+          <span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 58px; height: 40px; border-radius: 8px; background: rgba(15,12,9,0.82); border: 1px solid #d8a942; display: flex; align-items: center; justify-content: center; color: #d8a942; font-size: 14px;">▶</span>
+        </button>
+      </sc-if>
+      <sc-if value="{{ nowEv.isYtEmbed }}" hint-placeholder-val="{{ false }}">
+        <iframe src="https://www.youtube.com/embed/{{ nowEv.ytId }}?autoplay=1&rel=0" title="{{ nowEv.title }}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen="allowfullscreen" style="display: block; margin-top: 18px; width: 100%; max-width: 560px; aspect-ratio: 16 / 9; border: 1px solid #29221a; border-radius: 6px; background: #0b0906;"></iframe>
+      </sc-if>
       <div style="margin-top: 26px; padding-top: 22px; border-top: 1px solid #221c14; display: flex; flex-wrap: wrap; gap: 34px;">
         <sc-for list="{{ todayStats }}" as="s" hint-placeholder-count="5">
           <div style="display: flex; flex-direction: column; gap: 6px;">
@@ -582,6 +600,7 @@ class Component extends DCLogic {
       nowSub = t.sub + (latest.secs ? ' · ' + this.fmtDur(latest.secs) + (live ? ' and counting' : '') : '');
     }
     const nowDotStyle = 'width: 9px; height: 9px; border-radius: 50%; background: ' + (live ? '#d8a942' : '#5f574a') + ';' + (live ? ' animation: livePulse 2s ease infinite;' : '');
+    const nowEv = latest ? this.viewEvent(latest, autoEmbed) : {};
 
     // ---- today stats ----
     const todayKey = this.dayKey(new Date());
@@ -687,7 +706,7 @@ class Component extends DCLogic {
       loading: !S.loaded,
       noData: S.loaded && S.events.length === 0,
       showMap: this.showMapProp(),
-      nowDotStyle, nowEyebrow, nowLine, nowSub, todayStats,
+      nowDotStyle, nowEyebrow, nowLine, nowSub, nowEv, todayStats,
       searchVal: S.search,
       onSearch: (e) => this.setState({ search: e.target.value }),
       filterOptions, sortOptions,

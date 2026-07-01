@@ -29,8 +29,15 @@ Info.plist keys (all required at runtime):
 | `NSPhotoLibraryUsageDescription` | Pick photos to append to your log. |
 | `NSHealthShareUsageDescription` | Reads steps and sleep for the daily summary. |
 
-App Transport Security: if your server is plain `http://` on your LAN, add
-`NSAppTransportSecurity` → `NSAllowsLocalNetworking` = YES (or use HTTPS/Tailscale).
+Transport security: the endpoint default is `https://git.now.lan` (self-signed).
+A self-signed cert is a TLS **trust** issue, not an ATS one — no Info.plist key
+bypasses it. Install your CA/cert on the iPhone instead: AirDrop the `.crt` →
+Settings → Profile Downloaded → Install → then Settings → General → About →
+Certificate Trust Settings → enable full trust. Verify in Safari on the phone
+(`https://git.now.lan/events` should load without warning). The cert needs
+`subjectAltName: DNS:git.now.lan` and ≤825-day validity or iOS refuses it.
+(Only if you ever fall back to plain `http://` on the LAN would you add
+`NSAppTransportSecurity` → `NSAllowsLocalNetworking` = YES.)
 
 ## Point it at your server
 

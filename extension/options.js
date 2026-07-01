@@ -1,9 +1,15 @@
 const input = document.getElementById('endpoint');
 const status = document.getElementById('status');
 const testStatus = document.getElementById('teststatus');
+const pausedBox = document.getElementById('paused');
 
-chrome.storage.local.get('endpoint').then(({ endpoint }) => {
+chrome.storage.local.get(['endpoint', 'paused']).then(({ endpoint, paused }) => {
   input.value = endpoint || 'https://git.now.lan';
+  pausedBox.checked = !!paused;
+});
+
+pausedBox.addEventListener('change', () => {
+  chrome.storage.local.set({ paused: pausedBox.checked });
 });
 
 function endpointValue() {

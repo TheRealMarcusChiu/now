@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import CoreLocation
 
 /// Whereabouts tracking with almost no battery cost:
@@ -9,6 +10,7 @@ final class LocationTracker: NSObject, ObservableObject, CLLocationManagerDelega
     static let shared = LocationTracker()
 
     @Published var authorized = false
+    @Published var paused = UserDefaults.standard.bool(forKey: "trackingPaused")
     @Published var lastVisitDescription: String = "—"
     @Published var recentVisits: [Visit] = []
 
@@ -29,8 +31,24 @@ final class LocationTracker: NSObject, ObservableObject, CLLocationManagerDelega
         manager.allowsBackgroundLocationUpdates = true
         manager.pausesLocationUpdatesAutomatically = true
         manager.requestAlwaysAuthorization()
+        if !paused { startMonitors() }
+    }
+
+    private func startMonitors() {
         manager.startMonitoringVisits()
         manager.startMonitoringSignificantLocationChanges()
+    }
+
+    /// Pause/resume all automatic location logging. Persisted across launches.
+    func setPaused(_ p: Bool) {
+        paused = p
+        UserDefaults.standard.set(p, forKey: "trackingPaused")
+        if p {
+            manager.stopMonitoringVisits()
+            manager.stopMonitoringSignificantLocationChanges()
+        } else {
+            startMonitors()
+        }
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
@@ -41,6 +59,7 @@ final class LocationTracker: NSObject, ObservableObject, CLLocationManagerDelega
 
     // MARK: visits → place events
     func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
+        guard !paused else { return } // paused: drop even late-delivered visits
         // departureDate == distantFuture means we just ARRIVED; log on departure.
         guard visit.departureDate != Date.distantFuture,
               visit.arrivalDate != Date.distantPast else { return }

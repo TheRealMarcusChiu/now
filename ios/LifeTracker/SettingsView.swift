@@ -38,7 +38,20 @@ struct SettingsView: View {
                     Text("The Node server from your repo (node server/server.mjs). Use your machine's LAN IP or a Tailscale address so the phone can reach it.")
                 }
 
+                Section {
+                    Toggle("Pause all tracking", isOn: Binding(
+                        get: { location.paused },
+                        set: { location.setPaused($0) }
+                    ))
+                    .tint(Theme.gold)
+                } header: {
+                    Text("TRACKING").font(Theme.mono(10)).kerning(1.5)
+                } footer: {
+                    Text("While paused, no visits or daily health summaries are logged. Manual photo capture still works. Persists until you turn it back on.")
+                }
+
                 Section("Status") {
+                    LabeledContent("Tracking", value: location.paused ? "paused ⏸" : "active ✓")
                     LabeledContent("Location authorized", value: location.authorized ? "always ✓" : "no")
                     LabeledContent("Last visit", value: location.lastVisitDescription)
                     LabeledContent("Pending events", value: "\(api.pendingCount)")

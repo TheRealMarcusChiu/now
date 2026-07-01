@@ -21,6 +21,10 @@
 <body>
   <h1>Life Tracker</h1>
   <p>Where should logged events be sent? This is the Node server from your repo (<code>node server/server.mjs</code>).</p>
+  <label style="display:flex; align-items:center; gap:10px; cursor:pointer; margin-bottom:26px; color:#ece1cf; text-transform:none; letter-spacing:normal; font-size:13px;">
+    <input type="checkbox" id="paused" style="width:auto; accent-color:#d8a942;">
+    Pause tracking <span style="color:#8c8170">(also toggled by clicking the toolbar icon)</span>
+  </label>
   <label for="endpoint">Server endpoint</label>
   <input id="endpoint" type="text" placeholder="https://git.now.lan">
   <button id="test">Test connection</button><span id="teststatus"></span>

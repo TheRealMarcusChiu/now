@@ -21,6 +21,7 @@ final class HealthSync {
 
     /// Logs yesterday's summary once per day (append-only friendly).
     private func syncYesterdayIfNeeded() {
+        guard !UserDefaults.standard.bool(forKey: "trackingPaused") else { return } // paused
         let cal = Calendar.current
         let todayKey = ISO8601DateFormatter.string(from: cal.startOfDay(for: Date()),
                                                    timeZone: .current, formatOptions: [.withFullDate])

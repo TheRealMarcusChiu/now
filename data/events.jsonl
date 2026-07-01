@@ -4638,3 +4638,4 @@
 {"domain":"youtube.com","secs":5,"source":"chrome","title":"Subscriptions - YouTube","ts":"2026-07-01T22:31:48.200Z","type":"web","url":"https://www.youtube.com/feed/subscriptions"}
 {"secs":15,"source":"chrome","title":"DON'T PANIC--Finding Peace in America’s Prophetic Silence","ts":"2026-07-01T22:31:53.359Z","type":"youtube","url":"https://www.youtube.com/watch?v=pYkZ-Udtxuo","videoId":"pYkZ-Udtxuo"}
 {"domain":"youtube.com","secs":9,"source":"chrome","title":"10 Questions with Mike Winger (Episode 5) - YouTube","ts":"2026-07-01T22:32:12.745Z","type":"web","url":"https://www.youtube.com/watch?v=hGLj9f6nRCs"}
+{"domain":"claude.ai","secs":80,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T22:32:21.540Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a?file=index.html"}

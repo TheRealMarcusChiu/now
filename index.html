@@ -495,7 +495,7 @@ class Component extends DCLogic {
 
   // ---- admin: server + editor helpers ----
   apiBase() {
-    const ep = (this.state.endpoint || '').trim().replace(/\/$/, '');
+    const ep = (this.state.endpoint || '').trim().replace(/\/+$/, '');
     if (ep) return ep;
     if (location.protocol.indexOf('http') === 0) return '';
     return 'https://git.now.lan';

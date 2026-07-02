@@ -182,7 +182,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   const { q = [], endpoint = DEFAULT_ENDPOINT } = await chrome.storage.local.get(['q', 'endpoint']);
   if (!q.length) return;
   try {
-    const res = await fetch(endpoint.replace(/\/$/, '') + '/log', {
+    const res = await fetch(endpoint.trim().replace(/\/+$/, '') + '/log', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(q),

@@ -288,3 +288,5 @@
 {"type":"deletion","target":"2026-07-02T09:33:11.012Z|web","ts":"2026-07-02T09:37:49.733Z"}
 {"type":"deletion","target":"2026-07-02T09:33:36.688Z|web","ts":"2026-07-02T09:37:52.475Z"}
 {"domain":"biblehub.com","end":"2026-07-02T09:53:43.539Z","secs":5,"source":"chrome","title":"Deuteronomy 6:17 You are to diligently keep the commandments of the LORD your God and the testimonies and statutes He has given you.","ts":"2026-07-02T09:53:38.380Z","type":"web","url":"https://biblehub.com/deuteronomy/6-17.htm"}
+{"domain":"bbc.com","end":"2026-07-02T16:46:08.204Z","secs":38,"source":"chrome","title":"The US deported them to Venezuela - hours later earthquakes struck","ts":"2026-07-02T16:45:30.380Z","type":"web","url":"https://www.bbc.com/news/articles/c3eyxjy01y3o?at_medium=RSS&at_campaign=rss"}
+{"domain":"youtube.com","end":"2026-07-02T16:46:56.609Z","secs":31,"source":"chrome","title":"YouTube","ts":"2026-07-02T16:46:25.404Z","type":"web","url":"https://www.youtube.com/"}

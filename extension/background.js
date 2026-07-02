@@ -71,22 +71,21 @@ async function endSession(now) {
   const title = (s.title || '').slice(0, 200);
   const url = s.url.split('#')[0].slice(0, 500);
 
-  // merge with an earlier visit to the same site within the past hour:
+  // merge with an earlier visit to the same full URL within the past hour:
   // instead of a new log, send a revision that grows the existing one
   const { aggs = {} } = await chrome.storage.local.get('aggs');
-  const a = aggs[s.domain];
+  const a = aggs[url];
   if (a && now - Date.parse(a.end) < MERGE_WINDOW_MS) {
     a.secs += secs;
     a.end = endIso;
     a.title = title || a.title;
-    a.url = url;
-    aggs[s.domain] = a;
+    aggs[url] = a;
     await chrome.storage.local.set({ aggs });
     await queue([{
       type: 'revision',
       target: a.ts + '|web',
       ts: endIso,
-      data: { ts: a.ts, type: 'web', domain: s.domain, title: a.title, url: a.url, secs: a.secs, end: a.end, source: 'chrome' },
+      data: { ts: a.ts, type: 'web', domain: s.domain, title: a.title, url, secs: a.secs, end: a.end, source: 'chrome' },
     }]);
     return;
   }
@@ -102,9 +101,9 @@ async function endSession(now) {
     secs,
     source: 'chrome',
   };
-  aggs[s.domain] = { ts: ev.ts, end: ev.end, secs, title, url };
-  for (const d of Object.keys(aggs)) {
-    if (now - Date.parse(aggs[d].end) > MERGE_WINDOW_MS) delete aggs[d]; // prune stale
+  aggs[url] = { ts: ev.ts, end: ev.end, secs, title };
+  for (const k of Object.keys(aggs)) {
+    if (now - Date.parse(aggs[k].end) > MERGE_WINDOW_MS) delete aggs[k]; // prune stale
   }
   await chrome.storage.local.set({ aggs });
   await queue([ev]);

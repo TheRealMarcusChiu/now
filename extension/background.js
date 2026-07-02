@@ -24,9 +24,17 @@ async function isPaused() {
   return paused;
 }
 
+// exclusion entries are exact domains or glob patterns (* = anything), e.g. "*.lan"
+function matchesPattern(domain, pat) {
+  if (!domain || !pat) return false;
+  if (!pat.includes('*')) return domain === pat;
+  const re = new RegExp('^' + pat.split('*').map(s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('.*') + '$');
+  return re.test(domain);
+}
+
 async function isExcluded(domain) {
   const { excluded = [] } = await chrome.storage.local.get('excluded');
-  return excluded.includes(domain);
+  return excluded.some(p => matchesPattern(domain, p));
 }
 
 async function updateBadge() {
@@ -127,7 +135,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
   }
   if (changes.excluded) {
     const list = changes.excluded.newValue || [];
-    if (current && list.includes(current.domain)) current = null; // discard in-progress session, don't log it
+    if (current && list.some(p => matchesPattern(current.domain, p))) current = null; // discard in-progress session, don't log it
     else refreshActive(); // domain re-enabled: start tracking if it's the active tab
   }
 });

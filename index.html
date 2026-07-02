@@ -25,7 +25,6 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
-<script src="data/events.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { background: #0f0c09; }
@@ -343,7 +342,18 @@ class Component extends DCLogic {
   state = { events: [], loaded: false, filter: 'all', search: '', sortDir: 'desc', filterOpen: false, sortOpen: false, nowTick: Date.now(), heatOn: true, placeRange: '31', placeStart: '', placeEnd: '', ytOpen: {}, activeDay: null, admin: false, editor: null, settingsOpen: false, endpoint: (typeof localStorage !== 'undefined' && localStorage.getItem('lt-endpoint')) || '', testStatus: null, visibleDays: 21 };
 
   componentDidMount() {
-    // events.js loads async from <helmet> — poll until it lands
+    // Cache-busted load: fetch the canonical JSONL with ?t=TIMESTAMP so every
+    // page load sees fresh data. Where that fails (file://, preview hosts that
+    // reject query strings), fall back to a plain <script src="data/events.js">.
+    const loadLog = () => {
+      const sc = document.createElement('script');
+      sc.src = 'data/events.js';
+      document.head.appendChild(sc);
+    };
+    fetch('data/events.jsonl?t=' + Date.now(), { cache: 'no-store' })
+      .then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.text(); })
+      .then(txt => { window.__EVENTS = txt.split('\n').filter(Boolean).map(l => JSON.parse(l)); })
+      .catch(loadLog);
     let tries = 0;
     this._poll = setInterval(() => {
       tries++;

@@ -4685,3 +4685,5 @@ __logEvent({"domain":"claude.ai","secs":51,"source":"chrome","title":"Personal a
 __logEvent({"domain":"claude.ai","secs":100,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:53:08.168Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"});
 __logEvent({"domain":"claude.ai","secs":30,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:58:19.670Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"});
 __logEvent({"domain":"claude.ai","secs":52,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:58:52.542Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"});
+__logEvent({"domain":"git.marcuschiu.com","secs":75,"source":"chrome","title":"Now","ts":"2026-07-01T23:59:46.332Z","type":"web","url":"https://git.marcuschiu.com/now/"});
+__logEvent({"domain":"claude.ai","secs":23,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-02T00:01:00.906Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"});

@@ -186,7 +186,11 @@
       </div>
       <sc-for list="{{ day.events }}" as="e" hint-placeholder-count="4">
         <div style="display: grid; grid-template-columns: 58px 96px 1fr auto; gap: 20px; align-items: start; padding: 16px 0; border-bottom: 1px solid #1a150e;">
-          <div style="font-size: 12px; color: #5f574a; padding-top: 4px;">{{ e.time }}</div>
+          <div style="font-size: 12px; color: #5f574a; padding-top: 4px;">{{ e.time }}
+            <sc-if value="{{ e.hasEnd }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size: 10px; color: #463f33; margin-top: 3px;">→ {{ e.timeEnd }}</div>
+            </sc-if>
+          </div>
           <div style="padding-top: 3px;"><span style="{{ e.badgeStyle }}">{{ e.badge }}</span></div>
           <div style="min-width: 0;">
             <sc-if value="{{ e.hasUrl }}" hint-placeholder-val="{{ false }}">
@@ -364,7 +368,7 @@ class Component extends DCLogic {
           for (const e of events) if (!byKey.has(keyOf(e))) byKey.set(keyOf(e), e);
           for (const r of revs) { const t = byKey.get(r.target); if (t && r.data) Object.assign(t, r.data); }
         }
-        events.sort((a, b) => (a.ts < b.ts ? 1 : -1)); // newest first
+        events.sort((a, b) => ((a.end || a.ts) < (b.end || b.ts) ? 1 : -1)); // most recent end first
         this.setState({ events, loaded: true });
       }
     }, 120);
@@ -592,7 +596,7 @@ class Component extends DCLogic {
     const latest = S.events[0];
     let nowEyebrow = 'Waiting for first event', nowLine = '…', nowSub = 'The log is empty.', live = false;
     if (latest) {
-      const age = S.nowTick - new Date(latest.ts).getTime();
+      const age = S.nowTick - new Date(latest.end || latest.ts).getTime();
       live = age < liveWin;
       const m = this.typeMeta(latest.type), t = this.eventText(latest);
       nowEyebrow = (live ? 'Now · started ' : 'Last logged · ') + this.ago(latest.ts) + ' ago';
@@ -653,13 +657,13 @@ class Component extends DCLogic {
     if (S.sortDir === 'asc') filtered = filtered.slice().reverse();
     const dayMap = new Map();
     for (const e of filtered) {
-      const k = this.dayKey(new Date(e.ts));
+      const k = this.dayKey(new Date(e.end || e.ts));
       if (!dayMap.has(k)) dayMap.set(k, []);
       dayMap.get(k).push(e);
     }
     const daysAll = [];
     for (const [key, evs] of dayMap) {
-      const d = new Date(evs[0].ts);
+      const d = new Date(evs[0].end || evs[0].ts);
       const online = evs.filter(e => e.type === 'web' || e.type === 'youtube').reduce((a, e) => a + (e.secs || 0), 0);
       daysAll.push({
         key,
@@ -820,7 +824,7 @@ class Component extends DCLogic {
             let events;
             if (ed2.mode === 'new') {
               events = s.events.concat([Object.assign({ __uid: 'n' + Date.now() }, ev)]);
-              events.sort((a, b) => (a.ts < b.ts ? 1 : -1));
+              events.sort((a, b) => ((a.end || a.ts) < (b.end || b.ts) ? 1 : -1));
             } else {
               events = s.events.map(x => x.__uid === ed2.uid ? Object.assign({}, x, ev) : x);
             }
@@ -879,9 +883,14 @@ class Component extends DCLogic {
     const isAudio = /\.(wav|mp3|m4a|ogg|aac)$/i.test(media);
     const isVideoFile = /\.(mp4|mov|webm)$/i.test(media);
     const hasUrl = !!e.url && !isYt;
+    const fmtTime = (iso) => new Date(iso).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    const timeStart = fmtTime(e.ts);
+    const timeEnd = e.end ? fmtTime(e.end) : '';
     return {
       ts0: e.ts,
-      time: new Date(e.ts).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }),
+      time: timeStart,
+      hasEnd: !!timeEnd && timeEnd !== timeStart,
+      timeEnd,
       badge: m.badge, color: m.color,
       badgeStyle: 'display: inline-block; font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: ' + m.color + '; border: 1px solid ' + m.color + '44; border-radius: 3px; padding: 4px 8px;',
       title: t.title, sub: t.sub,

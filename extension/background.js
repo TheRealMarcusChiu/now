@@ -6,6 +6,7 @@
 const DEFAULT_ENDPOINT = 'https://git.now.lan';
 const MIN_SECONDS = 5;      // ignore blips shorter than this
 const FLUSH_EVERY_MIN = 0.5;
+const MERGE_WINDOW_MS = 60 * 60 * 1000; // revisits within an hour merge into one log
 
 let current = null; // { url, domain, title, start }
 
@@ -35,7 +36,15 @@ async function updateBadge() {
 async function queue(events) {
   if (!events.length) return;
   const { q = [] } = await chrome.storage.local.get('q');
-  await chrome.storage.local.set({ q: q.concat(events).slice(-2000) });
+  let next = q;
+  for (const ev of events) {
+    if (ev.type === 'revision') {
+      // compact: an unsent revision to the same log is superseded by this one
+      next = next.filter(x => !(x.type === 'revision' && x.target === ev.target));
+    }
+    next = next.concat([ev]);
+  }
+  await chrome.storage.local.set({ q: next.slice(-2000) });
 }
 
 async function endSession(now) {
@@ -44,15 +53,47 @@ async function endSession(now) {
   const s = current;
   current = null;
   if (secs < MIN_SECONDS) return;
-  await queue([{
+  const endIso = new Date(now).toISOString();
+  const title = (s.title || '').slice(0, 200);
+  const url = s.url.split('#')[0].slice(0, 500);
+
+  // merge with an earlier visit to the same site within the past hour:
+  // instead of a new log, send a revision that grows the existing one
+  const { aggs = {} } = await chrome.storage.local.get('aggs');
+  const a = aggs[s.domain];
+  if (a && now - Date.parse(a.end) < MERGE_WINDOW_MS) {
+    a.secs += secs;
+    a.end = endIso;
+    a.title = title || a.title;
+    a.url = url;
+    aggs[s.domain] = a;
+    await chrome.storage.local.set({ aggs });
+    await queue([{
+      type: 'revision',
+      target: a.ts + '|web',
+      ts: endIso,
+      data: { ts: a.ts, type: 'web', domain: s.domain, title: a.title, url: a.url, secs: a.secs, end: a.end, source: 'chrome' },
+    }]);
+    return;
+  }
+
+  // fresh log (start + end times); becomes the merge target for the next hour
+  const ev = {
     ts: new Date(s.start).toISOString(),
+    end: endIso,
     type: 'web',
     domain: s.domain,
-    title: (s.title || '').slice(0, 200),
-    url: s.url.split('#')[0].slice(0, 500),
+    title,
+    url,
     secs,
     source: 'chrome',
-  }]);
+  };
+  aggs[s.domain] = { ts: ev.ts, end: ev.end, secs, title, url };
+  for (const d of Object.keys(aggs)) {
+    if (now - Date.parse(aggs[d].end) > MERGE_WINDOW_MS) delete aggs[d]; // prune stale
+  }
+  await chrome.storage.local.set({ aggs });
+  await queue([ev]);
 }
 
 async function startSession(tab) {

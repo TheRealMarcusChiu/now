@@ -41,7 +41,8 @@ if (!fs.existsSync(EVJS)) fs.writeFileSync(EVJS, EVJS_HEADER);
 if (!fs.existsSync(JSONL)) fs.writeFileSync(JSONL, '');
 
 // 'revision' = append-only edit from the website's admin mode: {type:'revision', target:'<ts>|<type>', data:{…}}
-const ALLOWED_TYPES = new Set(['web', 'youtube', 'music', 'git', 'health', 'screen', 'place', 'photo', 'audio', 'video', 'note', 'revision']);
+// 'deletion' = append-only delete: {type:'deletion', target:'<ts>|<type>'} — the site hides the target on load
+const ALLOWED_TYPES = new Set(['web', 'youtube', 'music', 'git', 'health', 'screen', 'place', 'photo', 'audio', 'video', 'note', 'revision', 'deletion']);
 
 // ---- git auto-sync (commit + push after every append, debounced) ----
 const GIT_SYNC = process.env.GIT_SYNC !== 'off';

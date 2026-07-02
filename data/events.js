@@ -385,3 +385,5 @@ __logEvent({"data":{"domain":"youtube.com","end":"2026-07-02T19:57:16.569Z","sec
 __logEvent({"domain":"youtube.com","end":"2026-07-02T19:58:19.877Z","secs":59,"source":"chrome","title":"Subscriptions - YouTube","ts":"2026-07-02T19:57:21.195Z","type":"web","url":"https://www.youtube.com/feed/subscriptions"});
 __logEvent({"domain":"youtube.com","end":"2026-07-02T20:00:35.803Z","secs":136,"source":"chrome","title":"Groomed-A Male Model's Story-Buddy Krueger - YouTube","ts":"2026-07-02T19:58:19.877Z","type":"web","url":"https://www.youtube.com/watch?v=eEeIwGOhi-M"});
 __logEvent({"data":{"domain":"youtube.com","end":"2026-07-02T20:02:38.129Z","secs":504,"source":"chrome","title":"If God Is Good, Why Do I Suffer?: The Classic Collection with R.C. Sproul - YouTube","ts":"2026-07-02T19:34:22.459Z","type":"web","url":"https://www.youtube.com/watch?v=g6UgMDx9rJY"},"target":"2026-07-02T19:34:22.459Z|web","ts":"2026-07-02T20:02:38.129Z","type":"revision"});
+__logEvent({"type":"deletion","target":"2026-07-02T19:57:21.195Z|web","ts":"2026-07-02T20:04:44.432Z"});
+__logEvent({"type":"deletion","target":"2026-07-02T18:53:16.693Z|web","ts":"2026-07-02T20:04:54.138Z"});

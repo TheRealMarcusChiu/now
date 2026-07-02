@@ -1,7 +1,8 @@
 // Life Tracker — MV3 service worker.
 // Tracks the active tab: when you switch tabs/windows or go idle, the finished
 // session (domain, title, url, seconds) is queued and flushed to the server.
-// Click the toolbar icon to PAUSE/RESUME tracking (badge ❚❚ = paused).
+// The toolbar popup pauses/resumes tracking and excludes individual domains
+// (badge ❚❚ = paused).
 
 const DEFAULT_ENDPOINT = 'https://git.now.lan';
 const MIN_SECONDS = 5;      // ignore blips shorter than this
@@ -21,6 +22,11 @@ function trackable(url) {
 async function isPaused() {
   const { paused = false } = await chrome.storage.local.get('paused');
   return paused;
+}
+
+async function isExcluded(domain) {
+  const { excluded = [] } = await chrome.storage.local.get('excluded');
+  return excluded.includes(domain);
 }
 
 async function updateBadge() {
@@ -101,7 +107,9 @@ async function startSession(tab) {
   await endSession(now);
   if (!tab || !trackable(tab.url)) return;
   if (await isPaused()) return; // paused: finish old sessions, never start new ones
-  current = { url: tab.url, domain: domainOf(tab.url), title: tab.title, start: now };
+  const domain = domainOf(tab.url);
+  if (await isExcluded(domain)) return; // domain opted out via popup
+  current = { url: tab.url, domain, title: tab.title, start: now };
 }
 
 async function refreshActive() {
@@ -109,18 +117,19 @@ async function refreshActive() {
   await startSession(tab);
 }
 
-// toolbar icon = pause/resume toggle
-chrome.action.onClicked.addListener(async () => {
-  const paused = !(await isPaused());
-  await chrome.storage.local.set({ paused });
-});
-
-// react to pause changes from anywhere (icon click or options page)
+// react to pause / exclusion changes from anywhere (popup or options page)
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area !== 'local' || !changes.paused) return;
-  if (changes.paused.newValue) endSession(Date.now());
-  else refreshActive();
-  updateBadge();
+  if (area !== 'local') return;
+  if (changes.paused) {
+    if (changes.paused.newValue) endSession(Date.now());
+    else refreshActive();
+    updateBadge();
+  }
+  if (changes.excluded) {
+    const list = changes.excluded.newValue || [];
+    if (current && list.includes(current.domain)) current = null; // discard in-progress session, don't log it
+    else refreshActive(); // domain re-enabled: start tracking if it's the active tab
+  }
 });
 
 chrome.tabs.onActivated.addListener(refreshActive);
@@ -142,8 +151,8 @@ chrome.idle.onStateChanged.addListener(async (state) => {
 // YouTube watches arrive from the content script (dropped while paused)
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg && msg.kind === 'yt-watch' && msg.secs >= MIN_SECONDS) {
-    isPaused().then(paused => {
-      if (paused) return;
+    Promise.all([isPaused(), isExcluded('youtube.com')]).then(([paused, excluded]) => {
+      if (paused || excluded) return;
       return queue([{
         ts: new Date(msg.start).toISOString(),
         type: 'youtube',

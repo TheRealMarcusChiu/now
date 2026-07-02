@@ -304,9 +304,14 @@
         <sc-if value="{{ editorError }}" hint-placeholder-val="{{ false }}">
           <div style="margin-top: 16px; padding: 12px 14px; background: #2a1410; border: 1px solid #6b2c20; border-radius: 7px; color: #e7b0a4; font-size: 12px; line-height: 1.7;">{{ editorError }}</div>
         </sc-if>
-        <div style="margin-top: 24px; display: flex; gap: 10px; justify-content: flex-end;">
-          <button type="button" onClick="{{ closeEditor }}" style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 10px 16px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #29221a; color: #8c8170;" style-hover="border-color: #d8a942; color: #ece1cf;">Cancel</button>
-          <button type="button" onClick="{{ saveLog }}" style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 10px 18px; border-radius: 6px; cursor: pointer; background: #d8a942; border: 1px solid #d8a942; color: #0f0c09;" style-hover="background: #e6bb58;">{{ saveLabel }}</button>
+        <div style="margin-top: 24px; display: flex; gap: 10px; align-items: center;">
+          <sc-if value="{{ canDelete }}" hint-placeholder-val="{{ false }}">
+            <button type="button" onClick="{{ deleteLog }}" style="{{ deleteBtnStyle }}" style-hover="border-color: #a34432; color: #e7b0a4;">{{ deleteLabel }}</button>
+          </sc-if>
+          <div style="margin-left: auto; display: flex; gap: 10px;">
+            <button type="button" onClick="{{ closeEditor }}" style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 10px 16px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #29221a; color: #8c8170;" style-hover="border-color: #d8a942; color: #ece1cf;">Cancel</button>
+            <button type="button" onClick="{{ saveLog }}" style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 10px 18px; border-radius: 6px; cursor: pointer; background: #d8a942; border: 1px solid #d8a942; color: #0f0c09;" style-hover="background: #e6bb58;">{{ saveLabel }}</button>
+          </div>
         </div>
       </sc-if>
     </div>
@@ -369,14 +374,19 @@ class Component extends DCLogic {
           return true;
         });
         const raw = deduped.map((e, i) => Object.assign({ __uid: i }, e));
-        // apply append-only revisions (admin edits): {type:'revision', target, data}
+        // apply append-only revisions + deletions (admin edits): {type:'revision'|'deletion', target, data?}
+        const keyOf = x => x.id || (x.ts + '|' + x.type);
         const revs = raw.filter(e => e.type === 'revision');
-        const events = raw.filter(e => e.type !== 'revision');
+        const dels = raw.filter(e => e.type === 'deletion');
+        let events = raw.filter(e => e.type !== 'revision' && e.type !== 'deletion');
         if (revs.length) {
-          const keyOf = x => x.id || (x.ts + '|' + x.type);
           const byKey = new Map();
           for (const e of events) if (!byKey.has(keyOf(e))) byKey.set(keyOf(e), e);
           for (const r of revs) { const t = byKey.get(r.target); if (t && r.data) Object.assign(t, r.data); }
+        }
+        if (dels.length) {
+          const gone = new Set(dels.map(d => d.target));
+          events = events.filter(e => !gone.has(keyOf(e)));
         }
         events.sort((a, b) => ((a.end || a.ts) < (b.end || b.ts) ? 1 : -1)); // most recent end first
         this.setState({ events, loaded: true });
@@ -817,6 +827,23 @@ class Component extends DCLogic {
       })),
       editorFields,
       editorError: ed ? ed.error : null,
+      canDelete: !!ed && ed.mode === 'edit' && !!ed.type,
+      deleteLabel: ed && ed.deleting ? 'Deleting…' : (ed && ed.confirmDelete ? 'Really delete?' : 'Delete'),
+      deleteBtnStyle: 'font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 10px 16px; border-radius: 6px; cursor: pointer; background: transparent; transition: all 0.15s ease; border: 1px solid ' + (ed && ed.confirmDelete ? '#6b2c20; color: #e7b0a4;' : '#29221a; color: #8c8170;'),
+      deleteLog: () => {
+        const ed2 = this.state.editor;
+        if (!ed2 || ed2.saving || ed2.deleting) return;
+        if (!ed2.confirmDelete) {
+          this.setState(s => ({ editor: Object.assign({}, s.editor, { confirmDelete: true }) }));
+          return;
+        }
+        this.setState(s => ({ editor: Object.assign({}, s.editor, { deleting: true, error: null }) }));
+        this.postJson('/log', [{ type: 'deletion', target: ed2.targetKey, ts: new Date().toISOString() }]).then(() => {
+          this.setState(s => ({ events: s.events.filter(x => x.__uid !== ed2.uid), editor: null }), () => this.rebuildPlaceLayers());
+        }).catch(err => {
+          this.setState(s => ({ editor: Object.assign({}, s.editor, { deleting: false, confirmDelete: false, error: 'Could not reach the server (' + err.message + '). Is `node server/server.mjs` running? Check the endpoint via the gear button.' }) }));
+        });
+      },
       saveLabel: ed && ed.saving ? 'Saving…' : (ed && ed.mode === 'edit' ? 'Save revision →' : 'Append to log →'),
       openNew: () => this.setState({ editor: { mode: 'new', type: null, ev: null, error: null, saving: false } }),
       closeEditor: () => this.setState({ editor: null }),

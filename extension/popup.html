@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body { width: 280px; margin: 0; background: #0f0c09; color: #ece1cf; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+  .wrap { padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 12px; }
+  h1 { font-family: Georgia, serif; font-style: italic; font-weight: 500; font-size: 16px; margin: 0; }
+  .card { background: #14110b; border: 1px solid #2a2218; border-radius: 8px; padding: 12px 13px; display: flex; flex-direction: column; gap: 10px; }
+  .label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; }
+  #domain { font-size: 14px; word-break: break-all; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .state { font-size: 11px; }
+  .on { color: #8faa6e; } .off { color: #e7b0a4; } .dim { color: #8c8170; }
+  /* toggle switch */
+  .switch { position: relative; width: 38px; height: 21px; flex: none; cursor: pointer; }
+  .switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+  .knobbg { position: absolute; inset: 0; background: #2a2218; border-radius: 21px; transition: background 0.15s; }
+  .knob { position: absolute; top: 3px; left: 3px; width: 15px; height: 15px; background: #8c8170; border-radius: 50%; transition: left 0.15s, background 0.15s; }
+  .switch input:checked + .knobbg { background: #d8a942; }
+  .switch input:checked + .knobbg .knob { left: 20px; background: #0f0c09; }
+  .switch input:disabled + .knobbg { opacity: 0.4; }
+  .foot { display: flex; align-items: center; justify-content: space-between; }
+  a { color: #8c8170; font-size: 10.5px; text-decoration: none; }
+  a:hover { color: #d8a942; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Life Tracker</h1>
+
+    <div class="card">
+      <div class="label">This site</div>
+      <div id="domain" class="dim">…</div>
+      <div class="row">
+        <span id="sitestate" class="state dim"></span>
+        <label class="switch" title="Track this domain">
+          <input type="checkbox" id="sitetoggle" disabled>
+          <span class="knobbg"><span class="knob"></span></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="label" style="margin-bottom:4px">All tracking</div>
+          <span id="pausestate" class="state dim"></span>
+        </div>
+        <label class="switch" title="Pause / resume all tracking">
+          <input type="checkbox" id="pausetoggle">
+          <span class="knobbg"><span class="knob"></span></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="foot">
+      <a href="#" id="options">Options →</a>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

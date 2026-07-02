@@ -16,7 +16,8 @@
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     },
-    "default_title": "Life Tracker — logging"
+    "default_title": "Life Tracker",
+    "default_popup": "popup.html"
   },
   "permissions": ["tabs", "storage", "idle", "alarms"],
   "host_permissions": ["<all_urls>"],

@@ -103,6 +103,7 @@
           </sc-for>
         </div>
         <button type="button" onClick="{{ toggleHeat }}" style="{{ heatBtnStyle }}" style-hover="border-color: #d8a942; color: #ece1cf;">{{ heatBtnLabel }}</button>
+        <button type="button" onClick="{{ toggleReplay }}" style="{{ replayBtnStyle }}" style-hover="border-color: #d8a942; color: #ece1cf;">{{ replayBtnLabel }}</button>
       </div>
     </div>
     <sc-if value="{{ customRange }}" hint-placeholder-val="{{ false }}">
@@ -117,6 +118,35 @@
       </div>
     </sc-if>
     <div id="places-map" style="height: 440px; border: 1px solid #29221a; border-radius: 8px; overflow: hidden; background: #0b0906;"></div>
+    <sc-if value="{{ replayOn }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top: 12px; border: 1px solid #29221a; border-radius: 8px; background: #14110b; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+          <div style="min-width: 0;">
+            <span style="font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: 20px; color: #ece1cf;">{{ replayCurLabel }}</span>
+            <span style="margin-left: 10px; font-size: 11px; letter-spacing: 0.1em; color: #8c8170;">{{ replayCurTime }}</span>
+          </div>
+          <span style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #5f574a; white-space: nowrap;">stop {{ replayCounter }}</span>
+        </div>
+        <input type="range" min="0" max="{{ replayMax }}" step="1" value="{{ replayIdxVal }}" onInput="{{ onReplayScrub }}" style="width: 100%; accent-color: #d8a942; cursor: pointer;">
+        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <div style="display: inline-flex; align-items: center; gap: 8px;">
+            <button type="button" title="Restart" onClick="{{ onReplayRestart }}" style="width: 34px; height: 34px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #29221a; color: #8c8170; font-size: 12px;" style-hover="border-color: #d8a942; color: #ece1cf;">⏮</button>
+            <button type="button" title="Previous stop" onClick="{{ onReplayPrev }}" style="width: 34px; height: 34px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #29221a; color: #8c8170; font-size: 12px;" style-hover="border-color: #d8a942; color: #ece1cf;">◀</button>
+            <button type="button" title="{{ replayPlayTitle }}" onClick="{{ onReplayPlay }}" style="width: 44px; height: 34px; border-radius: 6px; cursor: pointer; background: #d8a942; border: 1px solid #d8a942; color: #0f0c09; font-size: 12px;" style-hover="background: #e6bb58;">{{ replayPlayLabel }}</button>
+            <button type="button" title="Next stop" onClick="{{ onReplayNext }}" style="width: 34px; height: 34px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid #29221a; color: #8c8170; font-size: 12px;" style-hover="border-color: #d8a942; color: #ece1cf;">▶</button>
+          </div>
+          <div style="display: inline-flex; align-items: center; gap: 9px;">
+            <span style="font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #5f574a;">Speed</span>
+            <div style="display: inline-flex; border: 1px solid #29221a; border-radius: 6px; overflow: hidden;">
+              <sc-for list="{{ replaySpeedBtns }}" as="sb" hint-placeholder-count="5">
+                <button type="button" onClick="{{ sb.onClick }}" style="{{ sb.style }}" style-hover="color: #ece1cf;">{{ sb.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #463f33;">Real = compressed realtime · 1 logged hour ≈ 1 second, so pauses between stops feel true to life</div>
+      </div>
+    </sc-if>
     <div style="margin-top: 10px; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #463f33;">{{ placesMeta }} · heat is recency-weighted — brighter means visited more recently · tiles load when online</div>
   </section>
   </sc-if>
@@ -344,7 +374,19 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;liveWindowMins&quot;: {&quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 15, &quot;min&quot;: 1, &quot;max&quot;: 120, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Behavior&quot;, &quot;description&quot;: &quot;How recent the latest event must be to show the pulsing NOW state&quot;}, &quot;autoEmbedYouTube&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;, &quot;description&quot;: &quot;Embed YouTube players inline instead of click-to-play thumbnails&quot;}, &quot;showMap&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;, &quot;description&quot;: &quot;Show the Places map + heatmap section&quot;}}">
 class Component extends DCLogic {
-  state = { events: [], loaded: false, filter: 'all', search: '', sortDir: 'desc', filterOpen: false, sortOpen: false, nowTick: Date.now(), heatOn: true, placeRange: '31', placeStart: '', placeEnd: '', ytOpen: {}, activeDay: null, admin: false, editor: null, settingsOpen: false, endpoint: (typeof localStorage !== 'undefined' && localStorage.getItem('lt-endpoint')) || '', testStatus: null, visibleDays: 21 };
+  state = { events: [], loaded: false, filter: 'all', search: '', sortDir: 'desc', filterOpen: false, sortOpen: false, nowTick: Date.now(), heatOn: true, placeRange: '31', placeStart: '', placeEnd: '', ytOpen: {}, activeDay: null, admin: false, editor: null, settingsOpen: false, endpoint: this.loadEndpoint(), testStatus: null, visibleDays: 21, replayOn: false, replayPlaying: false, replayIdx: 0, replaySpeed: '1' };
+
+  // Endpoint is stored per-site: several sites share git.marcuschiu.com's
+  // localStorage, so namespace the key by pathname to avoid collisions.
+  endpointKey() {
+    let p = (typeof location !== 'undefined' && location.pathname) || '/';
+    p = p.replace(/[^/]*$/, ''); // drop filename, keep the directory
+    return 'lt-endpoint:' + p;
+  }
+  loadEndpoint() {
+    if (typeof localStorage === 'undefined') return '';
+    return localStorage.getItem(this.endpointKey()) || localStorage.getItem('lt-endpoint') || '';
+  }
 
   componentDidMount() {
     // Cache-busted load: fetch the canonical JSONL with ?t=TIMESTAMP so every
@@ -462,6 +504,8 @@ class Component extends DCLogic {
     if (!this._map || !L) return;
     if (this._markers) { this._map.removeLayer(this._markers); this._markers = null; }
     if (this._heat) { this._map.removeLayer(this._heat); this._heat = null; }
+    if (this.state.replayOn) { this.renderReplay(); return; } // replay owns the map while active
+    this.clearReplayLayers();
     const places = this.placesInWindow();
     if (!places.length) return;
     // aggregate by name
@@ -491,6 +535,77 @@ class Component extends DCLogic {
     }
     const b = L.latLngBounds(places.map(p => [p.lat, p.lng]));
     this._map.fitBounds(b.pad(0.25));
+  }
+
+  // ---- location replay: step through place visits in chronological order ----
+  replayStops() {
+    // individual stops (not name-aggregated) sorted oldest→newest, so the path
+    // traces the actual journey through the selected time window
+    return this.placesInWindow()
+      .slice()
+      .sort((a, b) => new Date(a.ts) - new Date(b.ts));
+  }
+
+  clearReplayLayers() {
+    if (this._replayLayer) { this._map.removeLayer(this._replayLayer); this._replayLayer = null; }
+  }
+
+  renderReplay() {
+    const L = window.L;
+    if (!this._map || !L) return;
+    if (this._markers) { this._map.removeLayer(this._markers); this._markers = null; }
+    if (this._heat) { this._map.removeLayer(this._heat); this._heat = null; }
+    this.clearReplayLayers();
+    const stops = this.replayStops();
+    if (!stops.length) return;
+    const idx = Math.max(0, Math.min(this.state.replayIdx, stops.length - 1));
+    const g = this._replayLayer = L.layerGroup().addTo(this._map);
+    // trail of everywhere visited up to now
+    const path = stops.slice(0, idx + 1).map(s => [s.lat, s.lng]);
+    if (path.length > 1) L.polyline(path, { color: '#d8a942', weight: 2, opacity: 0.45, dashArray: '1 6', lineCap: 'round' }).addTo(g);
+    for (let i = 0; i < idx; i++) {
+      L.circleMarker([stops[i].lat, stops[i].lng], { radius: 3.5, color: '#8a6a24', weight: 1, fillColor: '#6b5320', fillOpacity: 0.6 }).addTo(g);
+    }
+    const cur = stops[idx];
+    L.circleMarker([cur.lat, cur.lng], { radius: 8, color: '#ffe9b8', weight: 2, fillColor: '#d8a942', fillOpacity: 0.95 })
+      .addTo(g)
+      .bindPopup('<b style="color:#ece1cf">' + cur.name + '</b><br><span style="color:#8c8170">' + new Date(cur.ts).toLocaleString() + '</span>')
+      .openPopup();
+    this._map.panTo([cur.lat, cur.lng], { animate: true });
+  }
+
+  replayDelayMs(from, to) {
+    const sp = this.state.replaySpeed;
+    if (sp === 'real') {
+      // compressed realtime: 1 logged hour ≈ 1s of playback, clamped so multi-day
+      // gaps stay watchable and rapid stops stay legible
+      const gap = new Date(to.ts) - new Date(from.ts);
+      return Math.min(8000, Math.max(350, gap / 3600));
+    }
+    return 900 / Number(sp); // 0.5×→1800ms · 1×→900 · 2×→450 · 4×→225
+  }
+
+  scheduleNextReplay() {
+    clearTimeout(this._replayTimer);
+    const stops = this.replayStops();
+    const i = this.state.replayIdx;
+    if (i >= stops.length - 1) { this.setState({ replayPlaying: false }); return; }
+    this._replayTimer = setTimeout(() => {
+      this.setState(s => ({ replayIdx: Math.min(stops.length - 1, s.replayIdx + 1) }), () => {
+        this.renderReplay();
+        if (this.state.replayPlaying) this.scheduleNextReplay();
+      });
+    }, this.replayDelayMs(stops[i], stops[i + 1]));
+  }
+
+  stepReplay(dir) {
+    const stops = this.replayStops();
+    if (!stops.length) return;
+    clearTimeout(this._replayTimer);
+    this.setState(s => ({
+      replayIdx: Math.max(0, Math.min(stops.length - 1, s.replayIdx + dir)),
+      replayPlaying: false,
+    }), () => this.renderReplay());
   }
 
   // ---- admin: server + editor helpers ----
@@ -577,7 +692,7 @@ class Component extends DCLogic {
 
   typeMeta(t) {
     return ({
-      web:     { badge: 'web',    color: '#d8a942', verb: 'Reading' },
+      web:     { badge: 'web',    color: '#d8a942', verb: '' },
       youtube: { badge: 'youtube',color: '#c96f4a', verb: 'Watching' },
       music:   { badge: 'music',  color: '#8faa6e', verb: 'Listening to' },
       git:     { badge: 'commit', color: '#9fb0c9', verb: 'Pushed' },
@@ -620,7 +735,7 @@ class Component extends DCLogic {
       live = age < liveWin;
       const m = this.typeMeta(latest.type), t = this.eventText(latest);
       nowEyebrow = (live ? 'Now · started ' : 'Last logged · ') + this.ago(latest.ts) + ' ago';
-      nowLine = m.verb + ' ' + (latest.type === 'git' ? '“' + t.title + '”' : t.title);
+      nowLine = (m.verb ? m.verb + ' ' : '') + (latest.type === 'git' ? '“' + t.title + '”' : t.title);
       nowSub = t.sub + (latest.secs ? ' · ' + this.fmtDur(latest.secs) + (live ? ' and counting' : '') : '');
     }
     const nowDotStyle = 'width: 9px; height: 9px; border-radius: 50%; background: ' + (live ? '#d8a942' : '#5f574a') + ';' + (live ? ' animation: livePulse 2s ease infinite;' : '');
@@ -643,6 +758,8 @@ class Component extends DCLogic {
     ];
 
     // ---- filter + sort dropdowns ----
+    const replayStops = this.replayStops();
+    const replayCur = replayStops.length ? replayStops[Math.max(0, Math.min(S.replayIdx, replayStops.length - 1))] : null;
     const order = ['all', 'web', 'youtube', 'music', 'git', 'place', 'photo', 'audio', 'health', 'screen'];
     const counts = {};
     for (const e of S.events) counts[e.type] = (counts[e.type] || 0) + 1;
@@ -754,7 +871,7 @@ class Component extends DCLogic {
       loadMore: () => this.setState(s => ({ visibleDays: s.visibleDays + 60 })),
       placeRangeBtns: [['7', '7d'], ['31', '31d'], ['90', '90d'], ['365', 'Year'], ['all', 'All'], ['custom', 'Custom']].map(([r, label], i, arr) => ({
         label,
-        onClick: () => this.setState({ placeRange: r }, () => this.rebuildPlaceLayers()),
+        onClick: () => this.setState({ placeRange: r, replayIdx: 0, replayPlaying: false }, () => { clearTimeout(this._replayTimer); this.rebuildPlaceLayers(); }),
         style: 'padding: 8px 12px; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; border: none; transition: all 0.15s ease; ' +
           (i < arr.length - 1 ? 'border-right: 1px solid #29221a; ' : '') +
           (S.placeRange === r ? 'background: #1a150e; color: #d8a942;' : 'background: transparent; color: #8c8170;'),
@@ -762,8 +879,8 @@ class Component extends DCLogic {
       customRange: S.placeRange === 'custom',
       placeStartVal: S.placeStart,
       placeEndVal: S.placeEnd,
-      onPlaceStart: (ev) => this.setState({ placeStart: ev.target.value }, () => this.rebuildPlaceLayers()),
-      onPlaceEnd: (ev) => this.setState({ placeEnd: ev.target.value }, () => this.rebuildPlaceLayers()),
+      onPlaceStart: (ev) => this.setState({ placeStart: ev.target.value, replayIdx: 0, replayPlaying: false }, () => { clearTimeout(this._replayTimer); this.rebuildPlaceLayers(); }),
+      onPlaceEnd: (ev) => this.setState({ placeEnd: ev.target.value, replayIdx: 0, replayPlaying: false }, () => { clearTimeout(this._replayTimer); this.rebuildPlaceLayers(); }),
       placesMeta: (() => {
         const evs = this.placesInWindow();
         const uniq = new Set(evs.map(e => e.name)).size;
@@ -780,6 +897,55 @@ class Component extends DCLogic {
         const on = !S.heatOn;
         this.setState({ heatOn: on });
         if (this._heat && this._map) { if (on) this._heat.addTo(this._map); else this._map.removeLayer(this._heat); }
+      },
+      // ---- location replay ----
+      replayOn: S.replayOn,
+      replayBtnLabel: 'Replay ' + (S.replayOn ? 'on' : 'off'),
+      replayBtnStyle: 'font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 8px 14px; border-radius: 6px; cursor: pointer; transition: all 0.18s ease; ' +
+        (S.replayOn ? 'background: #1d1710; border: 1px solid #d8a942; color: #d8a942;' : 'background: transparent; border: 1px solid #29221a; color: #8c8170;'),
+      toggleReplay: () => {
+        const on = !S.replayOn;
+        clearTimeout(this._replayTimer);
+        this.setState({ replayOn: on, replayPlaying: false, replayIdx: 0 }, () => {
+          if (on) this.renderReplay();
+          else { this.clearReplayLayers(); this.rebuildPlaceLayers(); }
+        });
+      },
+      replayCount: replayStops.length,
+      replayHasStops: replayStops.length > 0,
+      replayPos: replayStops.length ? Math.min(S.replayIdx, replayStops.length - 1) + 1 : 0,
+      replayCounter: (replayStops.length ? Math.min(S.replayIdx, replayStops.length - 1) + 1 : 0) + ' / ' + replayStops.length,
+      replayMax: Math.max(0, replayStops.length - 1),
+      replayIdxVal: Math.min(S.replayIdx, Math.max(0, replayStops.length - 1)),
+      replayCurLabel: replayCur ? replayCur.name : '—',
+      replayCurTime: replayCur ? new Date(replayCur.ts).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '',
+      replayPlayLabel: S.replayPlaying ? '❚❚' : '▶',
+      replayPlayTitle: S.replayPlaying ? 'Pause' : 'Play',
+      replaySpeedBtns: [['0.5', '0.5×'], ['1', '1×'], ['2', '2×'], ['4', '4×'], ['real', 'Real']].map(([sp, label], i, arr) => ({
+        label,
+        onClick: () => this.setState({ replaySpeed: sp }, () => { if (this.state.replayPlaying) this.scheduleNextReplay(); }),
+        style: 'padding: 7px 10px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border: none; transition: all 0.15s ease; ' +
+          (i < arr.length - 1 ? 'border-right: 1px solid #29221a; ' : '') +
+          (S.replaySpeed === sp ? 'background: #1a150e; color: #d8a942;' : 'background: transparent; color: #8c8170;'),
+      })),
+      onReplayScrub: (ev) => {
+        clearTimeout(this._replayTimer);
+        this.setState({ replayIdx: Number(ev.target.value), replayPlaying: false }, () => this.renderReplay());
+      },
+      onReplayPrev: () => this.stepReplay(-1),
+      onReplayNext: () => this.stepReplay(1),
+      onReplayRestart: () => { clearTimeout(this._replayTimer); this.setState({ replayIdx: 0, replayPlaying: false }, () => this.renderReplay()); },
+      onReplayPlay: () => {
+        const stops = this.replayStops();
+        if (!stops.length) return;
+        const playing = !S.replayPlaying;
+        let idx = S.replayIdx;
+        if (playing && idx >= stops.length - 1) idx = 0; // at end → restart
+        this.setState({ replayPlaying: playing, replayIdx: idx }, () => {
+          this.renderReplay();
+          if (playing) this.scheduleNextReplay();
+          else clearTimeout(this._replayTimer);
+        });
       },
     };
   }
@@ -886,7 +1052,7 @@ class Component extends DCLogic {
       testStatusText: ts ? ts.msg : '',
       testStatusStyle: 'font-size: 12px; letter-spacing: 0.08em; color: ' + (ts ? (ts.ok === true ? '#8faa6e' : ts.ok === false ? '#e7b0a4' : '#8c8170') : '#8c8170') + ';',
       saveEndpoint: () => {
-        try { localStorage.setItem('lt-endpoint', (this.state.endpoint || '').trim()); } catch (e) { /* file:// private mode */ }
+        try { localStorage.setItem(this.endpointKey(), (this.state.endpoint || '').trim()); } catch (e) { /* file:// private mode */ }
         this.setState({ testStatus: { msg: 'saved ✓', ok: true } });
       },
     };

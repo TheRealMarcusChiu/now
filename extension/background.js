@@ -11,6 +11,37 @@ const MERGE_WINDOW_MS = 60 * 60 * 1000; // revisits within an hour merge into on
 
 let current = null; // { url, domain, title, start }
 
+// Seeded on first install (see onInstalled). Users can edit/remove any of these
+// in the popup; seeding never overwrites lists that already exist.
+const DEFAULT_EXCLUDED = [
+  // local & dev noise
+  'localhost', '127.0.0.1', '*.local', '*.lan', '*.test',
+  // auth / account / password managers (noisy + sensitive)
+  'accounts.google.com', 'login.*', '*.okta.com', '*.1password.com', 'vault.bitwarden.com',
+  // banking & finance
+  '*.chase.com', '*.paypal.com', '*.venmo.com', '*.coinbase.com', 'turbotax.com', '*.irs.gov',
+  // health & medical
+  'mychart.*', '*.kaiserpermanente.org',
+  // email & messaging
+  'mail.google.com', 'outlook.*', 'web.whatsapp.com', '*.messenger.com', 'web.telegram.org',
+];
+const DEFAULT_EXCLUDED_URLS = [
+  // low-signal feed/home pages
+  'https://www.youtube.com/',
+  'https://www.youtube.com/feed/subscriptions',
+  'https://twitter.com/home',
+  'https://x.com/home',
+  'https://www.reddit.com/',
+];
+
+async function seedDefaults() {
+  const cur = await chrome.storage.local.get(['excluded', 'excludedUrls']);
+  const patch = {};
+  if (cur.excluded === undefined) patch.excluded = DEFAULT_EXCLUDED;
+  if (cur.excludedUrls === undefined) patch.excludedUrls = DEFAULT_EXCLUDED_URLS;
+  if (Object.keys(patch).length) await chrome.storage.local.set(patch);
+}
+
 function domainOf(url) {
   try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return null; }
 }
@@ -35,6 +66,18 @@ function matchesPattern(domain, pat) {
 async function isExcluded(domain) {
   const { excluded = [] } = await chrome.storage.local.get('excluded');
   return excluded.some(p => matchesPattern(domain, p));
+}
+
+// exact-URL exclusions: more specific than a domain — ignore ONE url, not the
+// whole site (e.g. https://www.youtube.com/ but still log individual videos).
+function normUrl(url) {
+  return (url || '').split('#')[0].replace(/\/+$/, '').toLowerCase();
+}
+
+async function isExcludedUrl(url) {
+  const { excludedUrls = [] } = await chrome.storage.local.get('excludedUrls');
+  const n = normUrl(url);
+  return excludedUrls.some(u => normUrl(u) === n);
 }
 
 async function updateBadge() {
@@ -116,6 +159,7 @@ async function startSession(tab) {
   if (await isPaused()) return; // paused: finish old sessions, never start new ones
   const domain = domainOf(tab.url);
   if (await isExcluded(domain)) return; // domain opted out via popup
+  if (await isExcludedUrl(tab.url)) return; // this exact URL opted out
   current = { url: tab.url, domain, title: tab.title, start: now };
 }
 
@@ -137,6 +181,11 @@ chrome.storage.onChanged.addListener((changes, area) => {
     if (current && list.some(p => matchesPattern(current.domain, p))) current = null; // discard in-progress session, don't log it
     else refreshActive(); // domain re-enabled: start tracking if it's the active tab
   }
+  if (changes.excludedUrls) {
+    const list = changes.excludedUrls.newValue || [];
+    if (current && list.some(u => normUrl(u) === normUrl(current.url))) current = null; // discard in-progress session
+    else refreshActive();
+  }
 });
 
 chrome.tabs.onActivated.addListener(refreshActive);
@@ -155,21 +204,51 @@ chrome.idle.onStateChanged.addListener(async (state) => {
   else await refreshActive();
 });
 
-// YouTube watches arrive from the content script (dropped while paused)
+// YouTube watches arrive from the content script, reported periodically during
+// playback. We merge repeats of the same session (msg.key) into one growing log:
+// the first report writes a fresh 'youtube' event, later ones send a revision.
+async function handleYtWatch(msg) {
+  if (await isPaused()) return;
+  if (await isExcluded('youtube.com')) return;
+  const now = Date.now();
+  const secs = Math.round(msg.secs);
+  const url = 'https://www.youtube.com/watch?v=' + msg.videoId;
+  const key = msg.key || (msg.videoId + '|' + msg.start);
+  const { ytaggs = {} } = await chrome.storage.local.get('ytaggs');
+  const a = ytaggs[key];
+  if (a) {
+    a.secs = Math.max(a.secs, secs); // reports carry cumulative seconds
+    a.title = msg.title || a.title;
+    a.end = now;
+    ytaggs[key] = a;
+    await chrome.storage.local.set({ ytaggs });
+    return queue([{
+      type: 'revision',
+      target: a.ts + '|youtube',
+      ts: new Date(now).toISOString(),
+      data: { ts: a.ts, type: 'youtube', videoId: msg.videoId, title: a.title, url, secs: a.secs, source: 'chrome' },
+    }]);
+  }
+  const startIso = new Date(msg.start).toISOString();
+  ytaggs[key] = { ts: startIso, secs, title: msg.title, end: now };
+  for (const k of Object.keys(ytaggs)) {
+    if (now - ytaggs[k].end > MERGE_WINDOW_MS) delete ytaggs[k]; // prune stale
+  }
+  await chrome.storage.local.set({ ytaggs });
+  return queue([{
+    ts: startIso,
+    type: 'youtube',
+    videoId: msg.videoId,
+    title: (msg.title || '').slice(0, 200),
+    url,
+    secs,
+    source: 'chrome',
+  }]);
+}
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg && msg.kind === 'yt-watch' && msg.secs >= MIN_SECONDS) {
-    Promise.all([isPaused(), isExcluded('youtube.com')]).then(([paused, excluded]) => {
-      if (paused || excluded) return;
-      return queue([{
-        ts: new Date(msg.start).toISOString(),
-        type: 'youtube',
-        videoId: msg.videoId,
-        title: (msg.title || '').slice(0, 200),
-        url: 'https://www.youtube.com/watch?v=' + msg.videoId,
-        secs: Math.round(msg.secs),
-        source: 'chrome',
-      }]);
-    }).then(() => sendResponse({ ok: true }));
+    handleYtWatch(msg).then(() => sendResponse({ ok: true })).catch(() => sendResponse({ ok: false }));
     return true;
   }
 });
@@ -191,4 +270,4 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 });
 
 chrome.runtime.onStartup.addListener(() => { refreshActive(); updateBadge(); });
-chrome.runtime.onInstalled.addListener(() => { refreshActive(); updateBadge(); });
+chrome.runtime.onInstalled.addListener(async () => { await seedDefaults(); refreshActive(); updateBadge(); });

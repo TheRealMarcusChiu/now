@@ -10,9 +10,10 @@
 //   GET  /*       — serves the static site (index.html, data/, media/) so you can
 //                   preview at http://127.0.0.1:8787 exactly as GitHub Pages will serve it.
 //
-// After the server appends, it auto-commits and pushes (debounced ~30s) so
-// GitHub Pages updates itself. Disable with GIT_SYNC=off, tune with
-// GIT_DEBOUNCE_SECS=10. Requires the repo to have a remote + stored credentials
+// After the server appends, it auto-commits and pushes in batches: the first
+// log update arms a timer and every update within the window rides the same
+// commit, which fires ~5 min later. Disable with GIT_SYNC=off, tune with
+// GIT_BATCH_SECS=60. Requires the repo to have a remote + stored credentials
 // (test once with a manual `git push`).
 
 import http from 'node:http';
@@ -46,7 +47,7 @@ const ALLOWED_TYPES = new Set(['web', 'youtube', 'music', 'git', 'health', 'scre
 
 // ---- git auto-sync (commit + push after every append, debounced) ----
 const GIT_SYNC = process.env.GIT_SYNC !== 'off';
-const GIT_DEBOUNCE_MS = Number(process.env.GIT_DEBOUNCE_SECS || 30) * 1000;
+const GIT_BATCH_MS = Number(process.env.GIT_BATCH_SECS || 300) * 1000; // batch log updates into one commit every 5 min
 let gitTimer = null, gitBusy = false, gitAgain = false;
 
 function git(args) {
@@ -58,8 +59,8 @@ function git(args) {
 
 function scheduleGitSync() {
   if (!GIT_SYNC) return;
-  clearTimeout(gitTimer);
-  gitTimer = setTimeout(runGitSync, GIT_DEBOUNCE_MS); // batch bursts into one commit
+  if (gitTimer) return; // a batch is already pending — this update rides it
+  gitTimer = setTimeout(() => { gitTimer = null; runGitSync(); }, GIT_BATCH_MS);
 }
 
 async function runGitSync() {
@@ -192,5 +193,5 @@ server.listen(PORT, () => {
   console.log(`  POST /log      append events (Chrome extension, scripts)`);
   console.log(`  POST /upload   media upload (iPhone app)`);
   console.log(`  GET  /events   raw JSONL`);
-  console.log(`  git sync: ${GIT_SYNC ? `on (debounce ${GIT_DEBOUNCE_MS / 1000}s)` : 'off'}`);
+  console.log(`  git sync: ${GIT_SYNC ? `on (batched every ${GIT_BATCH_MS / 1000}s)` : 'off'}`);
 });

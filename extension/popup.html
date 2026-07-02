@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <style>
-  body { width: 280px; margin: 0; background: #0f0c09; color: #ece1cf; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+  body { width: 300px; margin: 0; background: #0f0c09; color: #ece1cf; font-family: 'JetBrains Mono', ui-monospace, monospace; }
   .wrap { padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 12px; }
   h1 { font-family: Georgia, serif; font-style: italic; font-weight: 500; font-size: 16px; margin: 0; }
   .card { background: #14110b; border: 1px solid #2a2218; border-radius: 8px; padding: 12px 13px; display: flex; flex-direction: column; gap: 10px; }
   .label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; }
   #domain { font-size: 14px; word-break: break-all; }
+  #fullurl { font-size: 10.5px; color: #5f574a; word-break: break-all; line-height: 1.5; }
   .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
   .state { font-size: 11px; }
   .on { color: #8faa6e; } .off { color: #e7b0a4; } .dim { color: #8c8170; }
@@ -20,13 +21,28 @@
   .switch input:checked + .knobbg { background: #d8a942; }
   .switch input:checked + .knobbg .knob { left: 20px; background: #0f0c09; }
   .switch input:disabled + .knobbg { opacity: 0.4; }
+  /* list management */
+  .listhead { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .count { font-size: 10px; color: #5f574a; }
+  input.txt { background: #0f0c09; border: 1px solid #2a2218; border-radius: 6px; color: #ece1cf; font-size: 11.5px; padding: 8px 10px; outline: none; font-family: inherit; }
+  input.txt:focus { border-color: #d8a942; }
+  input.txt::placeholder { color: #5f574a; }
+  .filter { width: 100%; box-sizing: border-box; }
+  .scroll { display: flex; flex-direction: column; gap: 4px; max-height: 132px; overflow-y: auto; padding-right: 2px; }
+  .scroll::-webkit-scrollbar { width: 7px; }
+  .scroll::-webkit-scrollbar-thumb { background: #2a2218; border-radius: 4px; }
   .patrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 11.5px; padding: 5px 8px; background: #0f0c09; border: 1px solid #221c14; border-radius: 5px; }
   .patrow code { font-family: inherit; word-break: break-all; }
   .patrow.hit { border-color: #3a2f1a; }
   .patrow.hit code { color: #d8a942; }
   .patx { flex: none; background: transparent; border: none; color: #5f574a; font-size: 13px; line-height: 1; cursor: pointer; padding: 2px 4px; font-family: inherit; }
   .patx:hover { color: #e7b0a4; }
-  #pataddbtn:hover { border-color: #d8a942; color: #ece1cf; }
+  .empty { font-size: 11px; color: #5f574a; padding: 2px 1px; }
+  .addform { display: flex; gap: 6px; }
+  .addform .txt { flex: 1; min-width: 0; }
+  .addbtn { background: transparent; border: 1px solid #3a2f1a; border-radius: 6px; color: #d8a942; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 8px 12px; cursor: pointer; font-family: inherit; }
+  .addbtn:hover { border-color: #d8a942; color: #ece1cf; }
+  .hint { font-size: 10px; line-height: 1.6; color: #5f574a; }
   .foot { display: flex; align-items: center; justify-content: space-between; }
   a { color: #8c8170; font-size: 10.5px; text-decoration: none; }
   a:hover { color: #d8a942; }
@@ -46,6 +62,10 @@
           <span class="knobbg"><span class="knob"></span></span>
         </label>
       </div>
+      <div id="urlrow" class="row" style="display:none">
+        <div id="fullurl"></div>
+        <button type="button" id="ignoreurl" class="addbtn" style="flex:none" title="Ignore only this exact URL">Ignore URL</button>
+      </div>
     </div>
 
     <div class="card">
@@ -62,14 +82,33 @@
     </div>
 
     <div class="card">
-      <div class="label">Ignored domains</div>
-      <div id="patlist" style="display: flex; flex-direction: column; gap: 4px;"></div>
-      <div id="patempty" class="dim" style="font-size: 11px; display: none;">nothing ignored</div>
-      <form id="patform" style="display: flex; gap: 6px;">
-        <input type="text" id="patinput" placeholder="domain or pattern, e.g. *.lan" spellcheck="false" style="flex: 1; min-width: 0; background: #0f0c09; border: 1px solid #2a2218; border-radius: 6px; color: #ece1cf; font-size: 11.5px; padding: 8px 10px; outline: none; font-family: inherit;">
-        <button type="submit" id="pataddbtn" style="background: transparent; border: 1px solid #3a2f1a; border-radius: 6px; color: #d8a942; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 8px 12px; cursor: pointer; font-family: inherit;">Add</button>
+      <div class="listhead">
+        <div class="label">Ignored domains</div>
+        <span class="count" id="domcount"></span>
+      </div>
+      <input type="text" class="txt filter" id="domfilter" placeholder="Filter…" spellcheck="false" style="display:none">
+      <div class="scroll" id="domlist"></div>
+      <div class="empty" id="domempty" style="display:none">nothing ignored</div>
+      <form class="addform" id="domform">
+        <input type="text" class="txt" id="dominput" placeholder="domain or pattern, e.g. *.lan" spellcheck="false">
+        <button type="submit" class="addbtn">Add</button>
       </form>
-      <div class="dim" style="font-size: 10px; line-height: 1.6;">* matches anything — <span style="color:#b78f3a">*.lan</span> ignores every domain ending in .lan</div>
+      <div class="hint">* matches anything — <span style="color:#b78f3a">*.lan</span> ignores every domain ending in .lan</div>
+    </div>
+
+    <div class="card">
+      <div class="listhead">
+        <div class="label">Ignored URLs</div>
+        <span class="count" id="urlcount"></span>
+      </div>
+      <input type="text" class="txt filter" id="urlfilter" placeholder="Filter…" spellcheck="false" style="display:none">
+      <div class="scroll" id="urllist"></div>
+      <div class="empty" id="urlempty" style="display:none">nothing ignored</div>
+      <form class="addform" id="urlform">
+        <input type="text" class="txt" id="urlinput" placeholder="full URL, e.g. https://youtube.com/" spellcheck="false">
+        <button type="submit" class="addbtn">Add</button>
+      </form>
+      <div class="hint">Ignores one exact page — the rest of the domain keeps logging.</div>
     </div>
 
     <div class="foot">

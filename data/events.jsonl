@@ -284,3 +284,6 @@
 {"domain":"grok.com","end":"2026-07-02T09:33:24.340Z","secs":13,"source":"chrome","title":"Grok","ts":"2026-07-02T09:33:11.012Z","type":"web","url":"https://grok.com/"}
 {"domain":"accounts.google.com","end":"2026-07-02T09:33:32.380Z","secs":5,"source":"chrome","title":"Sign in - Google Accounts","ts":"2026-07-02T09:33:27.619Z","type":"web","url":"https://accounts.google.com/v3/signin/accountchooser?client_id=455662147616-fai32tqkrc0mqkouoe6l0suk287lkb1k.apps.googleusercontent.com&code_challenge=4oiE4Fg4ljGUzs2ih8LNZOARomlt0eEwLw9GyHg8X0w&code_challenge_method=S256&prompt=select_account&redirect_uri=https%3A%2F%2Faccounts.x.ai%2Fexchange-token%2F&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=eyJ0b2tlbiI6IkNFVDAxYzF4ZHN5Y0ladkFPLWctWEEiLCJt"}
 {"domain":"grok.com","end":"2026-07-02T09:33:52.443Z","secs":16,"source":"chrome","title":"Grok","ts":"2026-07-02T09:33:36.688Z","type":"web","url":"https://grok.com/?q=&reasoningMode=none&voice=false"}
+{"type":"deletion","target":"2026-07-02T09:33:27.619Z|web","ts":"2026-07-02T09:37:46.691Z"}
+{"type":"deletion","target":"2026-07-02T09:33:11.012Z|web","ts":"2026-07-02T09:37:49.733Z"}
+{"type":"deletion","target":"2026-07-02T09:33:36.688Z|web","ts":"2026-07-02T09:37:52.475Z"}

@@ -287,3 +287,4 @@
 {"type":"deletion","target":"2026-07-02T09:33:27.619Z|web","ts":"2026-07-02T09:37:46.691Z"}
 {"type":"deletion","target":"2026-07-02T09:33:11.012Z|web","ts":"2026-07-02T09:37:49.733Z"}
 {"type":"deletion","target":"2026-07-02T09:33:36.688Z|web","ts":"2026-07-02T09:37:52.475Z"}
+{"domain":"biblehub.com","end":"2026-07-02T09:53:43.539Z","secs":5,"source":"chrome","title":"Deuteronomy 6:17 You are to diligently keep the commandments of the LORD your God and the testimonies and statutes He has given you.","ts":"2026-07-02T09:53:38.380Z","type":"web","url":"https://biblehub.com/deuteronomy/6-17.htm"}

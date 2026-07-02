@@ -31,3 +31,5 @@ uploads/
 
 # NOTE: data/ and media/ are intentionally NOT ignored —
 # they ARE the append-only log the website serves.
+
+xcode/

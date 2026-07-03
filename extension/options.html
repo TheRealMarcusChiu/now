@@ -4,32 +4,82 @@
 <meta charset="utf-8">
 <title>Life Tracker — options</title>
 <style>
-  body { background: #0f0c09; color: #ece1cf; font-family: 'JetBrains Mono', ui-monospace, monospace; padding: 40px; max-width: 560px; }
-  h1 { font-family: Georgia, serif; font-style: italic; font-weight: 500; font-size: 28px; margin: 0 0 6px; }
-  p { color: #8c8170; font-size: 12.5px; line-height: 1.8; margin: 0 0 26px; }
+  * { box-sizing: border-box; }
+  body { background: #0f0c09; color: #ece1cf; font-family: 'JetBrains Mono', ui-monospace, monospace; padding: 48px 40px 80px; max-width: 820px; margin: 0 auto; }
+  h1 { font-family: Georgia, serif; font-style: italic; font-weight: 500; font-size: 30px; margin: 0 0 6px; }
+  .lede { color: #8c8170; font-size: 12.5px; line-height: 1.8; margin: 0 0 34px; }
+  section { border-top: 1px solid #221c14; padding: 30px 0; }
+  h2 { font-family: Georgia, serif; font-style: italic; font-weight: 500; font-size: 20px; margin: 0 0 4px; color: #ece1cf; }
+  .desc { color: #8c8170; font-size: 12px; line-height: 1.7; margin: 0 0 16px; }
+  .desc code, .lede code { color: #d8a942; }
   label { display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8170; margin-bottom: 9px; }
-  input { width: 100%; background: #14110b; border: 1px solid #2a2218; border-radius: 6px; color: #ece1cf; font-size: 14px; padding: 11px 13px; outline: none; font-family: inherit; box-sizing: border-box; }
-  input:focus { border-color: #d8a942; }
-  button { margin-top: 16px; background: #d8a942; color: #0f0c09; border: none; border-radius: 6px; padding: 11px 22px; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; font-family: inherit; }
-  #status { margin-left: 12px; font-size: 12px; color: #8faa6e; }
-  #test { background: transparent; border: 1px solid #3a2f1a; color: #d8a942; margin-right: 4px; }
-  #test:hover { border-color: #d8a942; color: #ece1cf; }
-  #teststatus { margin-left: 12px; font-size: 12px; }
+  input { width: 100%; background: #14110b; border: 1px solid #2a2218; border-radius: 6px; color: #ece1cf; font-size: 14px; padding: 11px 13px; outline: none; font-family: inherit; }
+  input:focus, textarea:focus { border-color: #d8a942; }
+  textarea { width: 100%; height: 300px; resize: vertical; background: #14110b; border: 1px solid #2a2218; border-radius: 8px; color: #ece1cf; font-size: 13px; line-height: 1.7; padding: 14px 16px; outline: none; font-family: inherit; white-space: pre; overflow-wrap: normal; overflow-x: auto; }
+  textarea::placeholder { color: #463f33; }
+  .bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+  button { background: #d8a942; color: #0f0c09; border: none; border-radius: 6px; padding: 11px 22px; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; font-family: inherit; }
+  button:hover { background: #e6bb58; }
+  button.ghost { background: transparent; border: 1px solid #3a2f1a; color: #d8a942; }
+  button.ghost:hover { border-color: #d8a942; color: #ece1cf; }
+  button.danger { background: transparent; border: 1px solid #6b2c20; color: #e7b0a4; }
+  button.danger:hover { border-color: #a34432; color: #ffd9cf; }
+  .count { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #5f574a; margin-left: auto; }
+  .msg { font-size: 12px; }
   .ok { color: #8faa6e; } .bad { color: #e7b0a4; } .dim { color: #8c8170; }
+  .hint { font-size: 11px; color: #5f574a; line-height: 1.7; margin-top: 12px; }
+  .hint b { color: #b78f3a; font-weight: 500; }
+  .toprow { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
 </style>
 </head>
 <body>
   <h1>Life Tracker</h1>
-  <p>Where should logged events be sent? This is the Node server from your repo (<code>node server/server.mjs</code>).</p>
-  <label style="display:flex; align-items:center; gap:10px; cursor:pointer; margin-bottom:26px; color:#ece1cf; text-transform:none; letter-spacing:normal; font-size:13px;">
-    <input type="checkbox" id="paused" style="width:auto; accent-color:#d8a942;">
-    Pause tracking <span style="color:#8c8170">(also in the toolbar popup)</span>
-  </label>
-  <label for="endpoint">Server endpoint</label>
-  <input id="endpoint" type="text" placeholder="https://git.now.lan">
-  <button id="test">Test connection</button><span id="teststatus"></span>
-  <br>
-  <button id="save">Save</button><span id="status"></span>
+  <p class="lede">Settings for the tracker. Edits here sync live with the toolbar popup.</p>
+
+  <section style="border-top:none; padding-top:0;">
+    <div class="toprow">
+      <input type="checkbox" id="paused" style="width:auto; accent-color:#d8a942;">
+      <label for="paused" style="margin:0; text-transform:none; letter-spacing:normal; font-size:13px; color:#ece1cf; cursor:pointer;">Pause all tracking</label>
+    </div>
+    <h2>Server endpoint</h2>
+    <p class="desc">Where logged events are sent — the Node server from your repo (<code>node server/server.mjs</code>). Leave empty to use the same origin the site is served from.</p>
+    <label for="endpoint">Endpoint</label>
+    <input id="endpoint" type="text" placeholder="https://git.now.lan">
+    <div class="bar">
+      <button id="test" class="ghost">Test connection</button>
+      <button id="saveEndpoint">Save</button>
+      <span id="teststatus" class="msg"></span>
+      <span id="endpointStatus" class="msg ok"></span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Ignored domains</h2>
+    <p class="desc">One entry per line — an exact host or a glob pattern. These are never logged.</p>
+    <textarea id="domains" spellcheck="false" placeholder="example.com&#10;*.lan&#10;mail.google.com"></textarea>
+    <div class="bar">
+      <button id="saveDomains">Save domains</button>
+      <button id="resetDomains" class="danger">Reset to defaults</button>
+      <span id="domainsStatus" class="msg"></span>
+      <span id="domainsCount" class="count"></span>
+    </div>
+    <div class="hint"><b>*</b> matches anything — <b>*.lan</b> ignores every host ending in <code>.lan</code>; <b>login.*</b> ignores every <code>login.</code>-prefixed host. Blank lines and <code>#</code> comments are ignored.</div>
+  </section>
+
+  <section>
+    <h2>Ignored URLs</h2>
+    <p class="desc">One full URL per line. More specific than a domain — ignores a single page while the rest of the site keeps logging.</p>
+    <textarea id="urls" spellcheck="false" placeholder="https://www.youtube.com/&#10;https://x.com/home"></textarea>
+    <div class="bar">
+      <button id="saveUrls">Save URLs</button>
+      <button id="resetUrls" class="danger">Reset to defaults</button>
+      <span id="urlsStatus" class="msg"></span>
+      <span id="urlsCount" class="count"></span>
+    </div>
+    <div class="hint">A trailing <code>/</code> and <code>#fragments</code> are ignored when matching, so <code>https://youtube.com</code> and <code>https://youtube.com/</code> are the same.</div>
+  </section>
+
+  <script src="defaults.js"></script>
   <script src="options.js"></script>
 </body>
 </html>

@@ -3,6 +3,7 @@
 // session (domain, title, url, seconds) is queued and flushed to the server.
 // The toolbar popup pauses/resumes tracking and excludes individual domains
 // (badge ❚❚ = paused).
+importScripts('defaults.js'); // provides LT_DEFAULT_EXCLUDED, LT_DEFAULT_EXCLUDED_URLS
 
 const DEFAULT_ENDPOINT = 'https://git.now.lan';
 const MIN_SECONDS = 5;      // ignore blips shorter than this
@@ -11,34 +12,11 @@ const MERGE_WINDOW_MS = 60 * 60 * 1000; // revisits within an hour merge into on
 
 let current = null; // { url, domain, title, start }
 
-// Seeded on first install (see onInstalled). Users can edit/remove any of these
-// in the popup; seeding never overwrites lists that already exist.
-const DEFAULT_EXCLUDED = [
-  // local & dev noise
-  'localhost', '127.0.0.1', '*.local', '*.lan', '*.test',
-  // auth / account / password managers (noisy + sensitive)
-  'accounts.google.com', 'login.*', '*.okta.com', '*.1password.com', 'vault.bitwarden.com',
-  // banking & finance
-  '*.chase.com', '*.paypal.com', '*.venmo.com', '*.coinbase.com', 'turbotax.com', '*.irs.gov',
-  // health & medical
-  'mychart.*', '*.kaiserpermanente.org',
-  // email & messaging
-  'mail.google.com', 'outlook.*', 'web.whatsapp.com', '*.messenger.com', 'web.telegram.org',
-];
-const DEFAULT_EXCLUDED_URLS = [
-  // low-signal feed/home pages
-  'https://www.youtube.com/',
-  'https://www.youtube.com/feed/subscriptions',
-  'https://twitter.com/home',
-  'https://x.com/home',
-  'https://www.reddit.com/',
-];
-
 async function seedDefaults() {
   const cur = await chrome.storage.local.get(['excluded', 'excludedUrls']);
   const patch = {};
-  if (cur.excluded === undefined) patch.excluded = DEFAULT_EXCLUDED;
-  if (cur.excludedUrls === undefined) patch.excludedUrls = DEFAULT_EXCLUDED_URLS;
+  if (cur.excluded === undefined) patch.excluded = LT_DEFAULT_EXCLUDED;
+  if (cur.excludedUrls === undefined) patch.excludedUrls = LT_DEFAULT_EXCLUDED_URLS;
   if (Object.keys(patch).length) await chrome.storage.local.set(patch);
 }
 

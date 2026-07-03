@@ -12,7 +12,7 @@
 //
 // After the server appends, it auto-commits and pushes in batches: the first
 // log update arms a timer and every update within the window rides the same
-// commit, which fires ~5 min later. Disable with GIT_SYNC=off, tune with
+// commit, which fires ~10 min later. Disable with GIT_SYNC=off, tune with
 // GIT_BATCH_SECS=60. Requires the repo to have a remote + stored credentials
 // (test once with a manual `git push`).
 
@@ -47,7 +47,7 @@ const ALLOWED_TYPES = new Set(['web', 'youtube', 'music', 'git', 'health', 'scre
 
 // ---- git auto-sync (commit + push after every append, debounced) ----
 const GIT_SYNC = process.env.GIT_SYNC !== 'off';
-const GIT_BATCH_MS = Number(process.env.GIT_BATCH_SECS || 300) * 1000; // batch log updates into one commit every 5 min
+const GIT_BATCH_MS = Number(process.env.GIT_BATCH_SECS || 600) * 1000; // batch log updates into one commit every 10 min
 let gitTimer = null, gitBusy = false, gitAgain = false;
 
 function git(args) {

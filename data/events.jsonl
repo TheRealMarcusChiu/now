@@ -8606,3 +8606,11 @@
 {"domain":"biblegateway.com","end":"2026-07-10T09:51:00.211Z","secs":6,"source":"chrome","title":"Psalm 42 MSG - A white-tailed deer drinks from the - Bible Gateway","ts":"2026-07-10T09:50:53.946Z","type":"web","url":"https://www.biblegateway.com/passage/?search=Psalm+42&version=MSG"}
 {"domain":"biblegateway.com","end":"2026-07-10T09:51:17.800Z","secs":18,"source":"chrome","title":"Psalm 42 NIV - BOOK II Psalms 42–72 -Psalm 42 - For - Bible Gateway","ts":"2026-07-10T09:51:00.211Z","type":"web","url":"https://www.biblegateway.com/passage/?search=Psalm+42&version=NIV"}
 {"data":{"domain":"biblegateway.com","end":"2026-07-10T09:51:45.609Z","secs":14,"source":"chrome","title":"Psalm 42 MSG - A white-tailed deer drinks from the - Bible Gateway","ts":"2026-07-10T09:50:53.946Z","type":"web","url":"https://www.biblegateway.com/passage/?search=Psalm+42&version=MSG"},"target":"2026-07-10T09:50:53.946Z|web","ts":"2026-07-10T09:51:45.609Z","type":"revision"}
+{"type":"deletion","target":"2026-07-10T09:49:04.505Z|web","ts":"2026-07-10T10:24:02.852Z"}
+{"type":"deletion","target":"2026-07-10T09:49:22.813Z|web","ts":"2026-07-10T10:24:05.805Z"}
+{"type":"deletion","target":"2026-07-10T09:48:27.832Z|web","ts":"2026-07-10T10:24:09.177Z"}
+{"type":"deletion","target":"2026-07-10T09:48:12.951Z|web","ts":"2026-07-10T10:24:11.576Z"}
+{"type":"deletion","target":"2026-07-10T09:42:32.699Z|web","ts":"2026-07-10T10:24:16.455Z"}
+{"data":{"domain":"biblegateway.com","end":"2026-07-10T10:25:09.462Z","secs":24,"source":"chrome","title":"Psalm 42 MSG - A white-tailed deer drinks from the - Bible Gateway","ts":"2026-07-10T09:50:53.946Z","type":"web","url":"https://www.biblegateway.com/passage/?search=Psalm+42&version=MSG"},"target":"2026-07-10T09:50:53.946Z|web","ts":"2026-07-10T10:25:09.462Z","type":"revision"}
+{"domain":"app.warp.dev","end":"2026-07-10T10:28:39.887Z","secs":9,"source":"chrome","title":"Sign up for Warp","ts":"2026-07-10T10:28:31.313Z","type":"web","url":"https://app.warp.dev/signup/remote?scheme=warp&state=3d144789-908c-4407-a624-c23ee0bfcbec&public_beta=true"}
+{"domain":"app.warp.dev","end":"2026-07-10T10:29:15.798Z","secs":5,"source":"chrome","title":"Sign up for Warp","ts":"2026-07-10T10:29:11.031Z","type":"web","url":"https://app.warp.dev/onboarding"}

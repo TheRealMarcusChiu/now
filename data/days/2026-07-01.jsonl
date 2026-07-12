@@ -1,0 +1,64 @@
+{"steps":0,"source":"Apple Health","ts":"2026-07-01T05:00:00.000Z","type":"health","sleepHrs":0}
+{"ts":"2026-07-01T08:00:00.000Z","type":"health","steps":8290,"sleepHrs":7.9,"source":"Apple Health"}
+{"ts":"2026-07-01T09:12:00.000Z","type":"place","name":"Home","lat":37.7689,"lng":-122.433,"kind":"residential","secs":5280,"source":"iphone"}
+{"ts":"2026-07-01T10:31:11.155Z","type":"web","domain":"marcuschiu.com","title":"Marcus Chiu — writing","url":"https://marcuschiu.com/","secs":132,"source":"chrome"}
+{"ts":"2026-07-01T11:17:39.996Z","type":"music","track":"Redbone","artist":"Childish Gambino","secs":207,"source":"apple-music"}
+{"ts":"2026-07-01T11:41:12.019Z","type":"web","domain":"lobste.rs","title":"Lobsters","url":"https://lobste.rs/","secs":3129,"source":"chrome"}
+{"ts":"2026-07-01T13:46:30.609Z","type":"web","domain":"github.com","title":"marcuschiu/life-tracker: append-only activity log","url":"https://github.com/","secs":1550,"source":"chrome"}
+{"ts":"2026-07-01T14:42:57.775Z","type":"music","track":"Redbone","artist":"Childish Gambino","secs":314,"source":"apple-music"}
+{"ts":"2026-07-01T15:39:50.800Z","type":"web","domain":"en.wikipedia.org","title":"Quantified self — Wikipedia","url":"https://en.wikipedia.org/","secs":991,"source":"chrome"}
+{"ts":"2026-07-01T16:00:00.000Z","type":"place","name":"Golden Gate Park — trailhead","lat":37.7694,"lng":-122.4862,"kind":"outdoors","secs":9300,"source":"iphone"}
+{"ts":"2026-07-01T17:22:22.795Z","type":"web","domain":"en.wikipedia.org","title":"Quantified self — Wikipedia","url":"https://en.wikipedia.org/","secs":2211,"source":"chrome"}
+{"ts":"2026-07-01T18:45:15.355Z","type":"web","domain":"developer.apple.com","title":"CLLocationManager | Apple Developer Docs","url":"https://developer.apple.com/","secs":3061,"source":"chrome"}
+{"ts":"2026-07-01T20:15:41.519Z","type":"place","name":"Home","lat":37.7689,"lng":-122.433,"kind":"residential","secs":2520,"source":"iphone"}
+{"ts":"2026-07-01T20:25:00.081Z","type":"web","domain":"leafletjs.com","title":"Leaflet — a JavaScript library for maps","url":"https://leafletjs.com/","secs":137,"source":"chrome"}
+{"ts":"2026-07-01T20:30:00.000Z","type":"screen","app":"Photos","mins":6,"source":"ios-screentime"}
+{"ts":"2026-07-01T20:33:41.519Z","type":"music","track":"Harvest Moon","artist":"Neil Young","secs":305,"source":"apple-music"}
+{"ts":"2026-07-01T20:50:00.000Z","type":"screen","app":"Safari","mins":26,"source":"ios-screentime"}
+{"ts":"2026-07-01T20:53:41.519Z","type":"web","domain":"github.com","title":"marcuschiu/life-tracker: append-only activity log","url":"https://github.com/","secs":240,"source":"chrome"}
+{"domain":"youtube.com","secs":5,"source":"chrome","title":"Subscriptions - YouTube","ts":"2026-07-01T22:31:48.200Z","type":"web","url":"https://www.youtube.com/feed/subscriptions"}
+{"secs":15,"source":"chrome","title":"DON'T PANIC--Finding Peace in America’s Prophetic Silence","ts":"2026-07-01T22:31:53.359Z","type":"youtube","url":"https://www.youtube.com/watch?v=pYkZ-Udtxuo","videoId":"pYkZ-Udtxuo"}
+{"domain":"youtube.com","secs":9,"source":"chrome","title":"10 Questions with Mike Winger (Episode 5) - YouTube","ts":"2026-07-01T22:32:12.745Z","type":"web","url":"https://www.youtube.com/watch?v=hGLj9f6nRCs"}
+{"domain":"claude.ai","secs":80,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T22:32:21.540Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a?file=index.html"}
+{"domain":"youtube.com","secs":35,"source":"chrome","title":"10 Questions with Mike Winger (Episode 5) - YouTube","ts":"2026-07-01T22:34:23.868Z","type":"web","url":"https://www.youtube.com/watch?v=hGLj9f6nRCs"}
+{"secs":157,"source":"chrome","title":"10 Questions with Mike Winger (Episode 5)","ts":"2026-07-01T22:34:28.970Z","type":"youtube","url":"https://www.youtube.com/watch?v=hGLj9f6nRCs","videoId":"hGLj9f6nRCs"}
+{"domain":"youtube.com","secs":5,"source":"chrome","title":"(1) 10 Questions with Mike Winger (Episode 5) - YouTube","ts":"2026-07-01T22:37:19.720Z","type":"web","url":"https://www.youtube.com/watch?v=hGLj9f6nRCs"}
+{"domain":"claude.ai","secs":7,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T22:37:24.918Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a?file=index.html"}
+{"domain":"claude.ai","secs":149,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T22:37:31.788Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"adguard.lan","secs":9,"source":"chrome","title":"AdGuard Home","ts":"2026-07-01T22:42:07.838Z","type":"web","url":"https://adguard.lan/"}
+{"domain":"adguard.lan","secs":18,"source":"chrome","title":"AdGuard Home","ts":"2026-07-01T22:42:17.271Z","type":"web","url":"https://adguard.lan/"}
+{"domain":"claude.ai","secs":15,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T22:45:29.021Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":63,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T22:46:02.969Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"github.com","secs":5,"source":"chrome","title":"TheRealMarcusChiu/now: now","ts":"2026-07-01T22:47:11.506Z","type":"web","url":"https://github.com/TheRealMarcusChiu/now"}
+{"domain":"github.com","secs":12,"source":"chrome","title":"Pages","ts":"2026-07-01T22:47:19.407Z","type":"web","url":"https://github.com/TheRealMarcusChiu/now/settings/pages"}
+{"domain":"claude.ai","secs":27,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T22:47:34.124Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":37,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T22:51:02.733Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"git.marcuschiu.com","secs":26,"source":"chrome","title":"Now","ts":"2026-07-01T22:51:52.913Z","type":"web","url":"https://git.marcuschiu.com/now/"}
+{"domain":"git.marcuschiu.com","secs":31,"source":"chrome","title":"Now","ts":"2026-07-01T22:52:19.989Z","type":"web","url":"https://git.marcuschiu.com/now/"}
+{"domain":"github.com","secs":11,"source":"chrome","title":"TheRealMarcusChiu/now: now","ts":"2026-07-01T22:52:51.017Z","type":"web","url":"https://github.com/TheRealMarcusChiu/now"}
+{"domain":"github.com","secs":53,"source":"chrome","title":"TheRealMarcusChiu/now: now","ts":"2026-07-01T22:53:12.174Z","type":"web","url":"https://github.com/TheRealMarcusChiu/now"}
+{"domain":"ssp.sh","secs":18,"source":"chrome","title":"Obsidian","ts":"2026-07-01T22:54:06.722Z","type":"web","url":"https://www.ssp.sh/brain/obsidian/"}
+{"domain":"claude.ai","secs":137,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T22:54:30.425Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":48,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T22:59:56.047Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":5,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:01:30.565Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":18,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:08:15.058Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":61,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:25:14.479Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":50,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:26:45.169Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":5,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:28:30.821Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":83,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:28:40.383Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":75,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:35:52.220Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":24,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:37:07.494Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"git.marcuschiu.com","secs":73,"source":"chrome","title":"Now","ts":"2026-07-01T23:37:49.549Z","type":"web","url":"https://git.marcuschiu.com/now/"}
+{"domain":"claude.ai","secs":45,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:39:02.536Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":45,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:41:25.272Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"ts":"2026-07-01T23:45:38.315Z","type":"photo","media":"media/2026-07-01_23-45-38.jpg","caption":"Test","source":"iphone-share","lat":33.06797703801944,"lng":-96.7488635473147}
+{"domain":"claude.ai","secs":9,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:45:55.912Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":57,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:46:04.618Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"git.marcuschiu.com","secs":45,"source":"chrome","title":"Now","ts":"2026-07-01T23:47:06.078Z","type":"web","url":"https://git.marcuschiu.com/now/"}
+{"domain":"claude.ai","secs":63,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:47:50.825Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":174,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:49:22.630Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a?file=index.html"}
+{"domain":"claude.ai","secs":51,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:52:17.102Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a?file=index.html"}
+{"domain":"claude.ai","secs":100,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:53:08.168Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":30,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:58:19.670Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"claude.ai","secs":52,"source":"chrome","title":"Personal activity tracking system","ts":"2026-07-01T23:58:52.542Z","type":"web","url":"https://claude.ai/design/p/d6210048-d1c6-4496-b5bd-e7bce6ca713a"}
+{"domain":"git.marcuschiu.com","secs":75,"source":"chrome","title":"Now","ts":"2026-07-01T23:59:46.332Z","type":"web","url":"https://git.marcuschiu.com/now/"}

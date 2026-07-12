@@ -203,7 +203,7 @@
     <div style="padding: 70px 0; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #5f574a;">Reading the log…</div>
   </sc-if>
   <sc-if value="{{ noData }}" hint-placeholder-val="{{ false }}">
-    <div style="margin-top: 40px; padding: 34px; border: 1px dashed #2a2218; border-radius: 8px; color: #8c8170; font-size: 13px; line-height: 1.9;">No events yet. This page reads <span style="color: #d8a942;">data/events.js</span> — start the server (<span style="color: #ece1cf;">node server/server.mjs</span>), install the Chrome extension, and this timeline fills itself in.</div>
+    <div style="margin-top: 40px; padding: 34px; border: 1px dashed #2a2218; border-radius: 8px; color: #8c8170; font-size: 13px; line-height: 1.9;">No events yet. This page reads the per-day logs in <span style="color: #d8a942;">data/days/</span> — start the server (<span style="color: #ece1cf;">node server/server.mjs</span>), install the Chrome extension, and this timeline fills itself in.</div>
   </sc-if>
 
   <div data-screen-label="Timeline">
@@ -389,18 +389,44 @@ class Component extends DCLogic {
   }
 
   componentDidMount() {
-    // Cache-busted load: fetch the canonical JSONL with ?t=TIMESTAMP so every
-    // page load sees fresh data. Where that fails (file://, preview hosts that
-    // reject query strings), fall back to a plain <script src="data/events.js">.
-    const loadLog = () => {
-      const sc = document.createElement('script');
-      sc.src = 'data/events.js';
-      document.head.appendChild(sc);
+    // The log lives in per-day files: data/manifest.json lists the days,
+    // data/days/YYYY-MM-DD.jsonl holds each day's events. Load order:
+    //   1. fetch manifest → fetch every day file in parallel → merge in memory
+    //      (search/filter/replay then work across ALL days, same as before)
+    //   2. legacy monolithic data/events.jsonl (pre-migration)
+    //   3. file:// — <script> tags: manifest.js → data/days/*.js, else events.js
+    const bust = '?t=' + Date.now();
+    const opts = { cache: 'no-store' };
+    const getText = (u) => fetch(u + bust, opts).then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.text(); });
+    const parseJsonl = (txt) => txt.split('\n').filter(Boolean).map(l => JSON.parse(l));
+    const loadViaScripts = () => {
+      // file://: manifest.js sets __DAY_MANIFEST, then one script per day file
+      window.__EVENTS = [];
+      window.__logEvent = (e) => window.__EVENTS.push(e);
+      const mf = document.createElement('script');
+      mf.src = 'data/manifest.js';
+      mf.onload = () => {
+        for (const d of (window.__DAY_MANIFEST || [])) {
+          const s = document.createElement('script');
+          s.src = 'data/days/' + d + '.js';
+          s.async = false; // preserve chronological execution order
+          document.head.appendChild(s);
+        }
+      };
+      mf.onerror = () => { // pre-migration fallback: monolithic events.js (defines its own __EVENTS)
+        const s = document.createElement('script');
+        s.src = 'data/events.js';
+        document.head.appendChild(s);
+      };
+      document.head.appendChild(mf);
     };
-    fetch('data/events.jsonl?t=' + Date.now(), { cache: 'no-store' })
-      .then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.text(); })
-      .then(txt => { window.__EVENTS = txt.split('\n').filter(Boolean).map(l => JSON.parse(l)); })
-      .catch(loadLog);
+    fetch('data/manifest.json' + bust, opts)
+      .then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+      .then(m => Promise.all((m.days || []).map(d => getText('data/days/' + d + '.jsonl').catch(() => ''))))
+      .then(texts => { window.__EVENTS = texts.flatMap(t => t ? parseJsonl(t) : []); })
+      .catch(() => getText('data/events.jsonl')
+        .then(txt => { window.__EVENTS = parseJsonl(txt); })
+        .catch(loadViaScripts));
     let tries = 0;
     this._poll = setInterval(() => {
       tries++;

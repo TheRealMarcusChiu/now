@@ -3,12 +3,17 @@
 //
 // What it does:
 //   POST /log     — accepts one event (or an array). Stamps ts if missing.
-//                   Appends to data/events.jsonl AND data/events.js (append-only, never rewrites).
+//                   Appends to data/days/YYYY-MM-DD.jsonl AND .js (append-only,
+//                   never rewrites) and keeps data/manifest.json up to date.
 //   POST /upload  — accepts {kind, ext, dataBase64, caption?, ts?, lat?, lng?}.
 //                   Writes the media file to media/ and appends a matching event.
-//   GET  /events  — returns the raw JSONL log.
+//   GET  /events  — returns the full log as JSONL (all day files concatenated).
 //   GET  /*       — serves the static site (index.html, data/, media/) so you can
 //                   preview at http://127.0.0.1:8787 exactly as GitHub Pages will serve it.
+//
+// Legacy: if a monolithic data/events.jsonl still exists at startup, the server
+// runs the migration (server/migrate-days.mjs) automatically — it's idempotent,
+// so restarts are always safe.
 //
 // After the server appends, it auto-commits and pushes in batches: the first
 // log update arms a timer and every update within the window rides the same
@@ -21,25 +26,45 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { migrateDays } from './migrate-days.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'data');
 const MEDIA = path.join(ROOT, 'media');
-const JSONL = path.join(DATA, 'events.jsonl');
-const EVJS = path.join(DATA, 'events.js');
+const DAYS = path.join(DATA, 'days');
+const MANIFEST = path.join(DATA, 'manifest.json');
+const MANIFEST_JS = path.join(DATA, 'manifest.js');
+const LEGACY_JSONL = path.join(DATA, 'events.jsonl');
 const PORT = process.env.PORT || 8787;
 
-const EVJS_HEADER =
-  '// APPEND-ONLY event log. The server appends exactly one __logEvent(...) line per event.\n' +
-  '// Same data as events.jsonl, wrapped so the site works over file:// (no fetch needed).\n' +
-  '// The reset (not ||) is deliberate: if the script executes twice, it must not double.\n' +
-  'window.__EVENTS = [];\n' +
-  'window.__logEvent = function (e) { window.__EVENTS.push(e); };\n';
-
 fs.mkdirSync(DATA, { recursive: true });
+fs.mkdirSync(DAYS, { recursive: true });
 fs.mkdirSync(MEDIA, { recursive: true });
-if (!fs.existsSync(EVJS)) fs.writeFileSync(EVJS, EVJS_HEADER);
-if (!fs.existsSync(JSONL)) fs.writeFileSync(JSONL, '');
+
+// fold any legacy monolith into per-day files before serving (idempotent no-op otherwise)
+let migratedAtBoot = false;
+try {
+  const m = migrateDays({ log: (...a) => console.log('[migrate]', ...a) });
+  migratedAtBoot = !m.skipped;
+} catch (err) {
+  console.error('[migrate] failed — fix data/ before events can be logged:', err.message);
+  process.exit(1);
+}
+
+// ---- per-day log files + manifest ----
+function loadManifest() {
+  try { return JSON.parse(fs.readFileSync(MANIFEST, 'utf8')).days || []; } catch { return []; }
+}
+function saveManifest(days) {
+  fs.writeFileSync(MANIFEST, JSON.stringify({ days }, null, 2) + '\n');
+  fs.writeFileSync(MANIFEST_JS,
+    '// AUTO-GENERATED list of per-day log files under data/days/.\n' +
+    'window.__DAY_MANIFEST = ' + JSON.stringify(days) + ';\n');
+}
+function dayOf(ts) {
+  const d = String(ts).slice(0, 10);
+  return /^\d{4}-\d{2}-\d{2}$/.test(d) ? d : 'undated';
+}
 
 // 'revision' = append-only edit from the website's admin mode: {type:'revision', target:'<ts>|<type>', data:{…}}
 // 'deletion' = append-only delete: {type:'deletion', target:'<ts>|<type>'} — the site hides the target on load
@@ -92,9 +117,21 @@ function appendEvents(events) {
     clean.push(e);
   }
   if (!clean.length) return 0;
-  // Append-only: two synchronized appends, never a rewrite.
-  fs.appendFileSync(JSONL, clean.map(e => JSON.stringify(e)).join('\n') + '\n');
-  fs.appendFileSync(EVJS, clean.map(e => '__logEvent(' + JSON.stringify(e) + ');').join('\n') + '\n');
+  // Append-only: group by day, two synchronized appends per day, never a rewrite.
+  const byDay = new Map();
+  for (const e of clean) {
+    const d = dayOf(e.ts);
+    if (!byDay.has(d)) byDay.set(d, []);
+    byDay.get(d).push(e);
+  }
+  let days = loadManifest();
+  let manifestDirty = false;
+  for (const [d, evs] of byDay) {
+    fs.appendFileSync(path.join(DAYS, d + '.jsonl'), evs.map(e => JSON.stringify(e)).join('\n') + '\n');
+    fs.appendFileSync(path.join(DAYS, d + '.js'), evs.map(e => '__logEvent(' + JSON.stringify(e) + ');').join('\n') + '\n');
+    if (!days.includes(d)) { days.push(d); manifestDirty = true; }
+  }
+  if (manifestDirty) saveManifest(days.sort());
   scheduleGitSync();
   return clean.length;
 }
@@ -164,8 +201,14 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (req.method === 'GET' && url.pathname === '/events') {
+      // full log = all day files concatenated in chronological order
       res.writeHead(200, { 'Content-Type': 'application/x-ndjson' });
-      return fs.createReadStream(JSONL).pipe(res);
+      for (const d of loadManifest()) {
+        const f = path.join(DAYS, d + '.jsonl');
+        if (fs.existsSync(f)) res.write(fs.readFileSync(f));
+      }
+      if (fs.existsSync(LEGACY_JSONL)) res.write(fs.readFileSync(LEGACY_JSONL)); // pre-migration data
+      return res.end();
     }
 
     // static site
@@ -194,4 +237,5 @@ server.listen(PORT, () => {
   console.log(`  POST /upload   media upload (iPhone app)`);
   console.log(`  GET  /events   raw JSONL`);
   console.log(`  git sync: ${GIT_SYNC ? `on (batched every ${GIT_BATCH_MS / 1000}s)` : 'off'}`);
+  if (migratedAtBoot) scheduleGitSync(); // commit the freshly split day files
 });

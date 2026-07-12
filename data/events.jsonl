@@ -9117,3 +9117,15 @@
 {"domain":"instagram.com","end":"2026-07-12T01:47:02.654Z","secs":7,"source":"chrome","title":"Instagram","ts":"2026-07-12T01:46:55.735Z","type":"web","url":"https://www.instagram.com/p/DHBbGKuTx6s/?img_index=1"}
 {"data":{"domain":"instagram.com","end":"2026-07-12T01:47:17.755Z","secs":73,"source":"chrome","title":"Instagram","ts":"2026-07-12T01:44:16.499Z","type":"web","url":"https://www.instagram.com/bright/"},"target":"2026-07-12T01:44:16.499Z|web","ts":"2026-07-12T01:47:17.755Z","type":"revision"}
 {"data":{"domain":"instagram.com","end":"2026-07-12T01:47:35.368Z","secs":436,"source":"chrome","title":"Instagram","ts":"2026-07-12T01:37:11.305Z","type":"web","url":"https://www.instagram.com/"},"target":"2026-07-12T01:37:11.305Z|web","ts":"2026-07-12T01:47:35.368Z","type":"revision"}
+{"type":"deletion","target":"2026-07-12T01:37:11.305Z|web","ts":"2026-07-12T02:06:00.571Z"}
+{"type":"deletion","target":"2026-07-12T01:44:16.499Z|web","ts":"2026-07-12T02:06:02.838Z"}
+{"type":"deletion","target":"2026-07-12T01:46:55.735Z|web","ts":"2026-07-12T02:06:04.905Z"}
+{"domain":"zalatpizza.com","end":"2026-07-12T02:05:47.901Z","secs":819,"source":"chrome","title":"zalatpizza.com","ts":"2026-07-12T01:52:09.321Z","type":"web","url":"https://zalatpizza.com/"}
+{"type":"deletion","target":"2026-07-12T01:46:05.460Z|web","ts":"2026-07-12T02:06:06.786Z"}
+{"type":"deletion","target":"2026-07-12T01:45:48.891Z|web","ts":"2026-07-12T02:06:08.879Z"}
+{"type":"deletion","target":"2026-07-12T01:45:37.495Z|web","ts":"2026-07-12T02:06:10.936Z"}
+{"type":"deletion","target":"2026-07-12T01:45:31.424Z|web","ts":"2026-07-12T02:06:12.992Z"}
+{"type":"deletion","target":"2026-07-12T01:45:07.725Z|web","ts":"2026-07-12T02:06:15.050Z"}
+{"type":"deletion","target":"2026-07-12T01:45:01.843Z|web","ts":"2026-07-12T02:06:17.243Z"}
+{"type":"deletion","target":"2026-07-12T01:44:36.283Z|web","ts":"2026-07-12T02:06:19.521Z"}
+{"domain":"youtube.com","end":"2026-07-12T02:08:42.040Z","secs":123,"source":"chrome","title":"What Few Christians Understand About Reality of HELL - YouTube","ts":"2026-07-12T02:06:39.345Z","type":"web","url":"https://www.youtube.com/shorts/0szmXs1ZQcw"}

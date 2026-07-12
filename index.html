@@ -392,9 +392,8 @@ class Component extends DCLogic {
     // The log lives in per-day files: data/manifest.json lists the days,
     // data/days/YYYY-MM-DD.jsonl holds each day's events. Load order:
     //   1. fetch manifest → fetch every day file in parallel → merge in memory
-    //      (search/filter/replay then work across ALL days, same as before)
-    //   2. legacy monolithic data/events.jsonl (pre-migration)
-    //   3. file:// — <script> tags: manifest.js → data/days/*.js, else events.js
+    //      (search/filter/replay then work across ALL days)
+    //   2. file:// — <script> tags: manifest.js → data/days/*.js
     const bust = '?t=' + Date.now();
     const opts = { cache: 'no-store' };
     const getText = (u) => fetch(u + bust, opts).then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.text(); });
@@ -413,20 +412,13 @@ class Component extends DCLogic {
           document.head.appendChild(s);
         }
       };
-      mf.onerror = () => { // pre-migration fallback: monolithic events.js (defines its own __EVENTS)
-        const s = document.createElement('script');
-        s.src = 'data/events.js';
-        document.head.appendChild(s);
-      };
       document.head.appendChild(mf);
     };
     fetch('data/manifest.json' + bust, opts)
       .then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
       .then(m => Promise.all((m.days || []).map(d => getText('data/days/' + d + '.jsonl').catch(() => ''))))
       .then(texts => { window.__EVENTS = texts.flatMap(t => t ? parseJsonl(t) : []); })
-      .catch(() => getText('data/events.jsonl')
-        .then(txt => { window.__EVENTS = parseJsonl(txt); })
-        .catch(loadViaScripts));
+      .catch(loadViaScripts);
     let tries = 0;
     this._poll = setInterval(() => {
       tries++;

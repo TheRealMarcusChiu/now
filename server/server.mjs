@@ -11,10 +11,6 @@
 //   GET  /*       — serves the static site (index.html, data/, media/) so you can
 //                   preview at http://127.0.0.1:8787 exactly as GitHub Pages will serve it.
 //
-// Legacy: if a monolithic data/events.jsonl still exists at startup, the server
-// runs the migration (server/migrate-days.mjs) automatically — it's idempotent,
-// so restarts are always safe.
-//
 // After the server appends, it auto-commits and pushes in batches: the first
 // log update arms a timer and every update within the window rides the same
 // commit, which fires ~10 min later. Disable with GIT_SYNC=off, tune with
@@ -26,7 +22,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { migrateDays } from './migrate-days.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'data');
@@ -34,22 +29,11 @@ const MEDIA = path.join(ROOT, 'media');
 const DAYS = path.join(DATA, 'days');
 const MANIFEST = path.join(DATA, 'manifest.json');
 const MANIFEST_JS = path.join(DATA, 'manifest.js');
-const LEGACY_JSONL = path.join(DATA, 'events.jsonl');
 const PORT = process.env.PORT || 8787;
 
 fs.mkdirSync(DATA, { recursive: true });
 fs.mkdirSync(DAYS, { recursive: true });
 fs.mkdirSync(MEDIA, { recursive: true });
-
-// fold any legacy monolith into per-day files before serving (idempotent no-op otherwise)
-let migratedAtBoot = false;
-try {
-  const m = migrateDays({ log: (...a) => console.log('[migrate]', ...a) });
-  migratedAtBoot = !m.skipped;
-} catch (err) {
-  console.error('[migrate] failed — fix data/ before events can be logged:', err.message);
-  process.exit(1);
-}
 
 // ---- per-day log files + manifest ----
 function loadManifest() {
@@ -207,7 +191,6 @@ const server = http.createServer(async (req, res) => {
         const f = path.join(DAYS, d + '.jsonl');
         if (fs.existsSync(f)) res.write(fs.readFileSync(f));
       }
-      if (fs.existsSync(LEGACY_JSONL)) res.write(fs.readFileSync(LEGACY_JSONL)); // pre-migration data
       return res.end();
     }
 
@@ -237,5 +220,4 @@ server.listen(PORT, () => {
   console.log(`  POST /upload   media upload (iPhone app)`);
   console.log(`  GET  /events   raw JSONL`);
   console.log(`  git sync: ${GIT_SYNC ? `on (batched every ${GIT_BATCH_MS / 1000}s)` : 'off'}`);
-  if (migratedAtBoot) scheduleGitSync(); // commit the freshly split day files
 });

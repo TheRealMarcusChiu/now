@@ -388,70 +388,115 @@ class Component extends DCLogic {
     return localStorage.getItem(this.endpointKey()) || localStorage.getItem('lt-endpoint') || '';
   }
 
+  // (re)process everything loaded so far: dedupe, apply revisions/deletions, sort
+  ingestEvents() {
+    const ev = window.__EVENTS || [];
+    // defensive dedupe: if a data script executed twice, drop exact repeats
+    const seen = new Set();
+    const deduped = ev.filter(e => {
+      const k = JSON.stringify(e);
+      if (seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
+    const raw = deduped.map((e, i) => Object.assign({ __uid: i }, e));
+    // apply append-only revisions + deletions (admin edits): {type:'revision'|'deletion', target, data?}
+    const keyOf = x => x.id || (x.ts + '|' + x.type);
+    const revs = raw.filter(e => e.type === 'revision');
+    const dels = raw.filter(e => e.type === 'deletion');
+    let events = raw.filter(e => e.type !== 'revision' && e.type !== 'deletion');
+    if (revs.length) {
+      const byKey = new Map();
+      for (const e of events) if (!byKey.has(keyOf(e))) byKey.set(keyOf(e), e);
+      for (const r of revs) { const t = byKey.get(r.target); if (t && r.data) Object.assign(t, r.data); }
+    }
+    if (dels.length) {
+      const gone = new Set(dels.map(d => d.target));
+      events = events.filter(e => !gone.has(keyOf(e)));
+    }
+    events.sort((a, b) => ((a.end || a.ts) < (b.end || b.ts) ? 1 : -1)); // most recent end first
+    this.setState({ events }, () => this.rebuildPlaceLayers());
+  }
+
   componentDidMount() {
     // The log lives in per-day files: data/manifest.json lists the days,
-    // data/days/YYYY-MM-DD.jsonl holds each day's events. Load order:
-    //   1. fetch manifest → fetch every day file in parallel → merge in memory
-    //      (search/filter/replay then work across ALL days)
-    //   2. file:// — <script> tags: manifest.js → data/days/*.js
+    // data/days/YYYY-MM-DD.jsonl holds each day's events. Infinite scroll:
+    // load only the newest chunk of day files up front, then fetch older
+    // chunks as the user nears the bottom of the page (or asks for history —
+    // search, wide map ranges, and replay force a full load so they always
+    // cover every file).
     const bust = '?t=' + Date.now();
     const opts = { cache: 'no-store' };
     const getText = (u) => fetch(u + bust, opts).then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.text(); });
     const parseJsonl = (txt) => txt.split('\n').filter(Boolean).map(l => JSON.parse(l));
-    const loadViaScripts = () => {
-      // file://: manifest.js sets __DAY_MANIFEST, then one script per day file
-      window.__EVENTS = [];
-      window.__logEvent = (e) => window.__EVENTS.push(e);
-      const mf = document.createElement('script');
-      mf.src = 'data/manifest.js';
-      mf.onload = () => {
-        for (const d of (window.__DAY_MANIFEST || [])) {
-          const s = document.createElement('script');
-          s.src = 'data/days/' + d + '.js';
-          s.async = false; // preserve chronological execution order
-          document.head.appendChild(s);
-        }
-      };
-      document.head.appendChild(mf);
+    const CHUNK = 30; // day files per load
+
+    window.__EVENTS = [];
+    window.__logEvent = (e) => window.__EVENTS.push(e);
+    this._days = [];      // all days, ascending (from manifest)
+    this._dayPtr = 0;     // index just below the oldest already-loaded day
+    this._loadingChunk = null;
+
+    // fetch path: pull a set of day files in parallel, append into __EVENTS
+    const fetchChunk = (days) =>
+      Promise.all(days.map(d => getText('data/days/' + d + '.jsonl').catch(() => '')))
+        .then(texts => { window.__EVENTS = window.__EVENTS.concat(texts.flatMap(t => t ? parseJsonl(t) : [])); });
+    // file:// path: one <script> per day file, resolve when all have loaded
+    const scriptChunk = (days) => new Promise(resolve => {
+      let pending = days.length;
+      if (!pending) return resolve();
+      const done = () => { if (--pending === 0) resolve(); };
+      for (const d of days) {
+        const s = document.createElement('script');
+        s.src = 'data/days/' + d + '.js';
+        s.async = false; // preserve chronological execution order
+        s.onload = done;
+        s.onerror = done;
+        document.head.appendChild(s);
+      }
+    });
+
+    // loads the next `n` older day files (newest-first) and re-ingests
+    this.loadOlderDays = (n) => {
+      if (this._loadingChunk) return this._loadingChunk;
+      if (this._dayPtr <= 0) return Promise.resolve();
+      const from = Math.max(0, this._dayPtr - n);
+      const chunk = this._days.slice(from, this._dayPtr).reverse(); // newest of the remainder first
+      this._dayPtr = from;
+      this._loadingChunk = this._loadChunk(chunk)
+        .then(() => { this._loadingChunk = null; this.ingestEvents(); })
+        .catch(() => { this._loadingChunk = null; });
+      return this._loadingChunk;
+    };
+    this.loadAllDays = () => this.loadOlderDays(Infinity);
+    this.hasUnloadedDays = () => this._dayPtr > 0;
+
+    const start = (days, loadChunk) => {
+      this._days = days;
+      this._dayPtr = days.length;
+      this._loadChunk = loadChunk;
+      this.loadOlderDays(CHUNK).then(() => this.setState({ loaded: true }));
     };
     fetch('data/manifest.json' + bust, opts)
       .then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
-      .then(m => Promise.all((m.days || []).map(d => getText('data/days/' + d + '.jsonl').catch(() => ''))))
-      .then(texts => { window.__EVENTS = texts.flatMap(t => t ? parseJsonl(t) : []); })
-      .catch(loadViaScripts);
-    let tries = 0;
-    this._poll = setInterval(() => {
-      tries++;
-      const ev = window.__EVENTS;
-      if ((ev && ev.length) || tries > 40) {
-        clearInterval(this._poll);
-        // defensive dedupe: if the data script executed twice, drop exact repeats
-        const seen = new Set();
-        const deduped = (ev || []).filter(e => {
-          const k = JSON.stringify(e);
-          if (seen.has(k)) return false;
-          seen.add(k);
-          return true;
-        });
-        const raw = deduped.map((e, i) => Object.assign({ __uid: i }, e));
-        // apply append-only revisions + deletions (admin edits): {type:'revision'|'deletion', target, data?}
-        const keyOf = x => x.id || (x.ts + '|' + x.type);
-        const revs = raw.filter(e => e.type === 'revision');
-        const dels = raw.filter(e => e.type === 'deletion');
-        let events = raw.filter(e => e.type !== 'revision' && e.type !== 'deletion');
-        if (revs.length) {
-          const byKey = new Map();
-          for (const e of events) if (!byKey.has(keyOf(e))) byKey.set(keyOf(e), e);
-          for (const r of revs) { const t = byKey.get(r.target); if (t && r.data) Object.assign(t, r.data); }
-        }
-        if (dels.length) {
-          const gone = new Set(dels.map(d => d.target));
-          events = events.filter(e => !gone.has(keyOf(e)));
-        }
-        events.sort((a, b) => ((a.end || a.ts) < (b.end || b.ts) ? 1 : -1)); // most recent end first
-        this.setState({ events, loaded: true });
-      }
-    }, 120);
+      .then(m => start((m.days || []).slice().sort(), fetchChunk))
+      .catch(() => {
+        // file://: manifest.js sets __DAY_MANIFEST
+        const mf = document.createElement('script');
+        mf.src = 'data/manifest.js';
+        mf.onload = () => start((window.__DAY_MANIFEST || []).slice().sort(), scriptChunk);
+        mf.onerror = () => this.setState({ loaded: true });
+        document.head.appendChild(mf);
+      });
+
+    // infinite scroll: nearing the bottom loads older day files (and reveals them)
+    this._checkInfiniteScroll = () => {
+      const nearBottom = window.innerHeight + window.scrollY > document.documentElement.scrollHeight - 900;
+      if (!nearBottom) return;
+      if (this._loadingChunk) return;
+      this.setState(s => ({ visibleDays: s.visibleDays + 30 }));
+      if (this.hasUnloadedDays()) this.loadOlderDays(CHUNK);
+    };
     this._onKey = (e) => {
       if ((e.metaKey || e.ctrlKey) && (e.key === 'e' || e.key === 'E')) {
         e.preventDefault();
@@ -465,6 +510,7 @@ class Component extends DCLogic {
       if (this._scrollRaf) return;
       this._scrollRaf = requestAnimationFrame(() => {
         this._scrollRaf = null;
+        this._checkInfiniteScroll();
         const secs = document.querySelectorAll('[id^="day-"]');
         let active = null;
         for (const s of secs) { if (s.getBoundingClientRect().top <= 150) active = s.id.slice(4); }
@@ -867,7 +913,11 @@ class Component extends DCLogic {
       showMap: this.showMapProp(),
       nowDotStyle, nowEyebrow, nowLine, nowSub, nowEv, todayStats,
       searchVal: S.search,
-      onSearch: (e) => this.setState({ search: e.target.value }),
+      onSearch: (e) => {
+        this.setState({ search: e.target.value });
+        // search must cover the whole history — pull any not-yet-loaded day files
+        if (e.target.value && this.hasUnloadedDays && this.hasUnloadedDays()) this.loadAllDays();
+      },
       filterOptions, sortOptions,
       filterLabel: S.filter === 'all' ? 'Everything' : this.typeMeta(S.filter).badge,
       sortLabel: S.sortDir === 'desc' ? 'Newest first' : 'Oldest first',
@@ -884,12 +934,20 @@ class Component extends DCLogic {
       countLabel: filtered.length + ' events · ' + daysAll.length + ' days',
       ...this.adminVals(),
       days, railMonths,
-      hasMoreDays: daysAll.length > days.length,
-      moreLabel: 'Load earlier — ' + (daysAll.length - days.length) + ' more days',
-      loadMore: () => this.setState(s => ({ visibleDays: s.visibleDays + 60 })),
+      hasMoreDays: daysAll.length > days.length || (this.hasUnloadedDays && this.hasUnloadedDays()),
+      moreLabel: 'Load earlier — ' + (daysAll.length - days.length > 0 ? (daysAll.length - days.length) + ' more days' : 'older history'),
+      loadMore: () => {
+        this.setState(s => ({ visibleDays: s.visibleDays + 60 }));
+        if (this.hasUnloadedDays && this.hasUnloadedDays()) this.loadOlderDays(60);
+      },
       placeRangeBtns: [['7', '7d'], ['31', '31d'], ['90', '90d'], ['365', 'Year'], ['all', 'All'], ['custom', 'Custom']].map(([r, label], i, arr) => ({
         label,
-        onClick: () => this.setState({ placeRange: r, replayIdx: 0, replayPlaying: false }, () => { clearTimeout(this._replayTimer); this.rebuildPlaceLayers(); }),
+        onClick: () => this.setState({ placeRange: r, replayIdx: 0, replayPlaying: false }, () => {
+          clearTimeout(this._replayTimer);
+          // ranges beyond a month need the full history
+          if (r !== '7' && r !== '31' && this.hasUnloadedDays && this.hasUnloadedDays()) this.loadAllDays();
+          else this.rebuildPlaceLayers();
+        }),
         style: 'padding: 8px 12px; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; border: none; transition: all 0.15s ease; ' +
           (i < arr.length - 1 ? 'border-right: 1px solid #29221a; ' : '') +
           (S.placeRange === r ? 'background: #1a150e; color: #d8a942;' : 'background: transparent; color: #8c8170;'),
@@ -897,8 +955,8 @@ class Component extends DCLogic {
       customRange: S.placeRange === 'custom',
       placeStartVal: S.placeStart,
       placeEndVal: S.placeEnd,
-      onPlaceStart: (ev) => this.setState({ placeStart: ev.target.value, replayIdx: 0, replayPlaying: false }, () => { clearTimeout(this._replayTimer); this.rebuildPlaceLayers(); }),
-      onPlaceEnd: (ev) => this.setState({ placeEnd: ev.target.value, replayIdx: 0, replayPlaying: false }, () => { clearTimeout(this._replayTimer); this.rebuildPlaceLayers(); }),
+      onPlaceStart: (ev) => this.setState({ placeStart: ev.target.value, replayIdx: 0, replayPlaying: false }, () => { clearTimeout(this._replayTimer); if (this.hasUnloadedDays && this.hasUnloadedDays()) this.loadAllDays(); else this.rebuildPlaceLayers(); }),
+      onPlaceEnd: (ev) => this.setState({ placeEnd: ev.target.value, replayIdx: 0, replayPlaying: false }, () => { clearTimeout(this._replayTimer); if (this.hasUnloadedDays && this.hasUnloadedDays()) this.loadAllDays(); else this.rebuildPlaceLayers(); }),
       placesMeta: (() => {
         const evs = this.placesInWindow();
         const uniq = new Set(evs.map(e => e.name)).size;
@@ -924,6 +982,8 @@ class Component extends DCLogic {
       toggleReplay: () => {
         const on = !S.replayOn;
         clearTimeout(this._replayTimer);
+        // replay traces the whole journey — make sure every day file is loaded
+        if (on && this.hasUnloadedDays && this.hasUnloadedDays()) this.loadAllDays();
         this.setState({ replayOn: on, replayPlaying: false, replayIdx: 0 }, () => {
           if (on) this.renderReplay();
           else { this.clearReplayLayers(); this.rebuildPlaceLayers(); }

@@ -1,0 +1,1 @@
+__logEvent({"domain":"biblegateway.com","end":"2026-07-24T06:02:04.298Z","secs":5,"source":"chrome","title":"Lamentations 3:22-23 - Because of the LORD’s great love we - Bible Gateway","ts":"2026-07-24T06:01:59.123Z","type":"web","url":"https://www.biblegateway.com/passage/?search=Lamentations+3%3A22-23"});

@@ -1,0 +1,2 @@
+__logEvent({"domain":"grok.com","end":"2026-07-29T00:49:58.017Z","secs":30,"source":"chrome","title":"Grok","ts":"2026-07-29T00:49:28.257Z","type":"web","url":"https://grok.com/"});
+__logEvent({"domain":"grok.com","end":"2026-07-29T00:50:30.574Z","secs":32,"source":"chrome","title":"Tdarr Flow: Nvidia GPU Transcoding? - Grok","ts":"2026-07-29T00:49:58.196Z","type":"web","url":"https://grok.com/c/8a9c36a0-8970-4be2-8af3-415757a7a34e?rid=f3475713-5f7e-4d14-91e7-d664f7374fba"});

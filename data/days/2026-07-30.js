@@ -1,0 +1,1 @@
+__logEvent({"domain":"biblehub.com","end":"2026-07-30T04:04:58.406Z","secs":11,"source":"chrome","title":"Ephesians 1:10 as a plan for the fullness of time, to bring all things in heaven and on earth together in Christ.","ts":"2026-07-30T04:04:47.541Z","type":"web","url":"https://biblehub.com/ephesians/1-10.htm"});

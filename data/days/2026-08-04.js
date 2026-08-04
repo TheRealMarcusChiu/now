@@ -1,0 +1,1 @@
+__logEvent({"domain":"dailystar.co.uk","end":"2026-08-04T00:38:05.970Z","secs":17,"source":"chrome","title":"Jesy Nelson sparks romance speculation after cosy snap with new mystery man - Daily Star","ts":"2026-08-04T00:37:49.077Z","type":"web","url":"https://www.dailystar.co.uk/showbiz/jesy-nelson-sparks-romance-speculation-37509644"});

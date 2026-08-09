@@ -1,1 +1,2 @@
 __logEvent({"domain":"tinypng.com","end":"2026-08-09T03:40:26.616Z","secs":13,"source":"chrome","title":"tinypng.com","ts":"2026-08-09T03:40:13.988Z","type":"web","url":"https://tinypng.com/"});
+__logEvent({"domain":"cbsnews.com","end":"2026-08-09T05:39:19.826Z","secs":16,"source":"chrome","title":"Hunter Biden says his father's cancer has spread: \"It's very painful and it's very debilitating\" - CBS News","ts":"2026-08-09T05:39:03.750Z","type":"web","url":"https://www.cbsnews.com/news/joe-biden-cancer-has-spread-hunter-biden-says/"});

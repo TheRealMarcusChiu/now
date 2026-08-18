@@ -1,0 +1,3 @@
+__logEvent({"domain":"consumercare.bigreport.com","end":"2026-08-18T02:05:20.354Z","secs":23,"source":"chrome","title":"Big - Consumer Care","ts":"2026-08-18T02:04:57.736Z","type":"web","url":"https://consumercare.bigreport.com/additionalinfo-casereport.html"});
+__logEvent({"domain":"consumercare.bigreport.com","end":"2026-08-18T02:05:27.452Z","secs":5,"source":"chrome","title":"Big - Consumer Care","ts":"2026-08-18T02:05:22.897Z","type":"web","url":"https://consumercare.bigreport.com/dashboard.html"});
+__logEvent({"domain":"consumercare.bigreport.com","end":"2026-08-18T02:06:07.449Z","secs":40,"source":"chrome","title":"Download","ts":"2026-08-18T02:05:27.695Z","type":"web","url":"https://consumercare.bigreport.com/cc/api/Document/Download"});

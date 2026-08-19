@@ -1,0 +1,1 @@
+__logEvent({"domain":"crunchyroll.com","end":"2026-08-19T00:04:46.555Z","secs":18,"source":"chrome","title":"Watch Kaiju No. 8 - Crunchyroll","ts":"2026-08-19T00:04:28.719Z","type":"web","url":"https://www.crunchyroll.com/series/GG5H5XQ7D/kaiju-no-8"});

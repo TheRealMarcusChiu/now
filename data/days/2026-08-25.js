@@ -1,0 +1,1 @@
+__logEvent({"domain":"newadvent.org","end":"2026-08-25T03:50:31.889Z","secs":9,"source":"chrome","title":"CHURCH FATHERS: Confessions, Book I (St. Augustine)","ts":"2026-08-25T03:50:22.433Z","type":"web","url":"https://www.newadvent.org/fathers/110101.htm"});

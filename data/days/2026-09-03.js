@@ -1,0 +1,1 @@
+__logEvent({"domain":"inv.nadeko.net","end":"2026-09-03T03:48:30.946Z","secs":5,"source":"chrome","title":"\"I Am The Vine\" - John 15:1-5 - Jonny Ardavanis - Invidious","ts":"2026-09-03T03:48:25.986Z","type":"web","url":"https://inv.nadeko.net/watch?v=SfB0xmgwWeg"});

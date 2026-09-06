@@ -1,1 +1,2 @@
 __logEvent({"domain":"youtube.cm","end":"2026-09-06T03:57:37.568Z","secs":6,"source":"chrome","title":"youtube.cm","ts":"2026-09-06T03:57:31.994Z","type":"web","url":"http://youtube.cm/"});
+__logEvent({"domain":"tiktok.com","end":"2026-09-06T14:15:43.006Z","secs":9,"source":"chrome","title":"This account is private. Follow this account to see their videos or visit TikTok to discover new creators.","ts":"2026-09-06T14:15:34.151Z","type":"web","url":"https://www.tiktok.com/@tatianasuero"});

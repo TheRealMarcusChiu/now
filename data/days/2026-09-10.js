@@ -1,1 +1,2 @@
 __logEvent({"domain":"biblehub.com","end":"2026-09-10T05:00:22.723Z","secs":30,"source":"chrome","title":"biblehub.com/james/5-16.htm","ts":"2026-09-10T04:59:52.508Z","type":"web","url":"https://biblehub.com/james/5-16.htm"});
+__logEvent({"domain":"people.com","end":"2026-09-10T14:38:48.031Z","secs":10,"source":"chrome","title":"people.com/movies/dun-meng-kidnapped-boston-marathon-bombers-looks-back-on-ordeal/","ts":"2026-09-10T14:38:38.040Z","type":"web","url":"https://people.com/movies/dun-meng-kidnapped-boston-marathon-bombers-looks-back-on-ordeal/"});

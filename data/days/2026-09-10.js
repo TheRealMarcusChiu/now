@@ -1,0 +1,1 @@
+__logEvent({"domain":"biblehub.com","end":"2026-09-10T05:00:22.723Z","secs":30,"source":"chrome","title":"biblehub.com/james/5-16.htm","ts":"2026-09-10T04:59:52.508Z","type":"web","url":"https://biblehub.com/james/5-16.htm"});

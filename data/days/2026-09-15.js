@@ -1,0 +1,2 @@
+__logEvent({"domain":"mljtrust.org","end":"2026-09-15T01:57:06.644Z","secs":9,"source":"chrome","title":"mljtrust.org/sermon/general-consideration/","ts":"2026-09-15T01:56:57.147Z","type":"web","url":"https://www.mljtrust.org/sermon/general-consideration/"});
+__logEvent({"domain":"thegospelcoalition.org","end":"2026-09-15T02:03:07.022Z","secs":23,"source":"chrome","title":"Talk, Don't Listen, to Yourself","ts":"2026-09-15T02:02:43.814Z","type":"web","url":"https://www.thegospelcoalition.org/blogs/justin-taylor/talk-dont-listen-to-yourself/"});

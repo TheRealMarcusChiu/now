@@ -1,0 +1,1 @@
+__logEvent({"domain":"jinsolgukbap.net","end":"2026-09-16T00:48:46.834Z","secs":9,"source":"chrome","title":"jinsolgukbap.net/menu","ts":"2026-09-16T00:48:37.827Z","type":"web","url":"https://www.jinsolgukbap.net/menu"});

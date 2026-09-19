@@ -72,3 +72,5 @@
 {"domain":"gravatar.com","end":"2026-09-19T17:55:07.593Z","secs":25,"source":"chrome","title":"About | Gravatar","ts":"2026-09-19T17:54:42.880Z","type":"web","url":"https://gravatar.com/profile/about/professional"}
 {"domain":"gravatar.com","end":"2026-09-19T17:55:34.632Z","secs":27,"source":"chrome","title":"About | Gravatar","ts":"2026-09-19T17:55:07.593Z","type":"web","url":"https://gravatar.com/profile/about/contact"}
 {"domain":"gravatar.com","end":"2026-09-19T17:55:57.165Z","secs":23,"source":"chrome","title":"gravatar.com/marcusrchiu","ts":"2026-09-19T17:55:34.632Z","type":"web","url":"https://gravatar.com/marcusrchiu"}
+{"data":{"domain":"docs.gitlab.com","end":"2026-09-19T17:56:07.787Z","secs":60,"source":"chrome","title":"Passkeys | GitLab Docs","ts":"2026-09-19T17:31:36.586Z","type":"web","url":"https://docs.gitlab.com/19.4/auth/passkeys/"},"target":"2026-09-19T17:31:36.586Z|web","ts":"2026-09-19T17:56:07.787Z","type":"revision"}
+{"domain":"gravatar.com","end":"2026-09-19T17:56:21.381Z","secs":5,"source":"chrome","title":"Your Free Avatar, Profile, and Link In Bio | Gravatar","ts":"2026-09-19T17:56:16.261Z","type":"web","url":"https://gravatar.com/"}

@@ -1,1 +1,3 @@
 __logEvent({"domain":"community-scripts.org","end":"2026-09-19T03:40:56.526Z","secs":130,"source":"chrome","title":"GitLab | Proxmox VE Helper Scripts","ts":"2026-09-19T03:38:46.466Z","type":"web","url":"https://community-scripts.org/scripts/gitlab"});
+__logEvent({"domain":"community-scripts.org","end":"2026-09-19T16:28:06.872Z","secs":8,"source":"chrome","title":"GitLab | Proxmox VE Helper Scripts","ts":"2026-09-19T16:27:58.752Z","type":"web","url":"https://community-scripts.org/scripts/gitlab"});
+__logEvent({"domain":"192.168.111.101","end":"2026-09-19T16:29:16.821Z","secs":36,"source":"chrome","title":"pve1 - Proxmox Virtual Environment","ts":"2026-09-19T16:28:40.959Z","type":"web","url":"https://192.168.111.101:8006/"});

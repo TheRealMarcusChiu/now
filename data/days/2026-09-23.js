@@ -1,0 +1,1 @@
+__logEvent({"domain":"developer.nvidia.com","end":"2026-09-23T00:45:47.134Z","secs":82,"source":"chrome","title":"Introducing NVFP4 for Efficient and Accurate Low-Precision Inference | NVIDIA Technical Blog","ts":"2026-09-23T00:44:25.483Z","type":"web","url":"https://developer.nvidia.com/blog/introducing-nvfp4-for-efficient-and-accurate-low-precision-inference"});

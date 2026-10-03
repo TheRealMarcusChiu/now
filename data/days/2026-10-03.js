@@ -1,0 +1,1 @@
+__logEvent({"domain":"bbc.com","end":"2026-10-03T21:12:27.128Z","secs":41,"source":"chrome","title":"bbc.com/news/articles/c8zxl62yzxzxo?at_medium=RSS&at_campaign=rss","ts":"2026-10-03T21:11:45.768Z","type":"web","url":"https://www.bbc.com/news/articles/c8zxl62yzxzxo?at_medium=RSS&at_campaign=rss"});

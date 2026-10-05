@@ -1,0 +1,1 @@
+__logEvent({"domain":"asrockrack.com","end":"2026-10-05T04:22:34.976Z","secs":15,"source":"chrome","title":"ROMED8-2T/BCM - Single Socket SP3 AMD EPYC 7003 Server Motherboard | ASRock Rack","ts":"2026-10-05T04:22:19.843Z","type":"web","url":"https://www.asrockrack.com/general/productdetail.asp?Model=ROMED8-2T/BCM"});

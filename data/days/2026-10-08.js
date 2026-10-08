@@ -1,1 +1,2 @@
 __logEvent({"domain":"oneuptime.com","end":"2026-10-08T00:01:36.182Z","secs":38,"source":"chrome","title":"How to Set Up Security Scanning in GitLab CI","ts":"2026-10-08T00:00:58.126Z","type":"web","url":"https://oneuptime.com/blog/post/2025-12-21-security-scanning-gitlab-ci/view"});
+__logEvent({"domain":"en.wikipedia.org","end":"2026-10-08T02:10:36.138Z","secs":7,"source":"chrome","title":"GDDR6 SDRAM - Wikipedia","ts":"2026-10-08T02:10:29.090Z","type":"web","url":"https://en.wikipedia.org/wiki/GDDR6_SDRAM"});

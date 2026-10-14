@@ -1,0 +1,2 @@
+__logEvent({"domain":"biblehub.com","end":"2026-10-14T03:16:37.316Z","secs":7,"source":"chrome","title":"Matthew 5:48 Be perfect, therefore, as your heavenly Father is perfect.","ts":"2026-10-14T03:16:30.230Z","type":"web","url":"https://biblehub.com/matthew/5-48.htm"});
+__logEvent({"domain":"biblehub.com","end":"2026-10-14T03:16:37.316Z","secs":7,"source":"chrome","title":"Matthew 5:48 Be perfect, therefore, as your heavenly Father is perfect.","ts":"2026-10-14T03:16:30.230Z","type":"web","url":"https://biblehub.com/matthew/5-48.htm"});

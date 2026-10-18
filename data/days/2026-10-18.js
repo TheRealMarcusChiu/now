@@ -15,3 +15,5 @@ __logEvent({"type":"deletion","target":"2026-08-31T05:22:28.874Z|web","ts":"2026
 __logEvent({"type":"deletion","target":"2026-08-02T06:17:13.110Z|web","ts":"2026-10-18T02:59:55.747Z"});
 __logEvent({"domain":"github.com","end":"2026-10-18T03:01:42.014Z","secs":11,"source":"chrome","title":"TheRealMarcusChiu (Marcus Chiu) / September 2026","ts":"2026-10-18T03:01:31.434Z","type":"web","url":"https://github.com/TheRealMarcusChiu"});
 __logEvent({"domain":"github.com","end":"2026-10-18T03:02:12.972Z","secs":29,"source":"chrome","title":"TheRealMarcusChiu (Marcus Chiu) / August 2026","ts":"2026-10-18T03:01:43.922Z","type":"web","url":"https://github.com/TheRealMarcusChiu?tab=overview&from=2026-08-01&to=2026-08-31"});
+__logEvent({"domain":"testufo.com","end":"2026-10-18T03:38:01.085Z","secs":77,"source":"chrome","title":"testufo.com","ts":"2026-10-18T03:36:43.773Z","type":"web","url":"https://testufo.com/"});
+__logEvent({"domain":"blurbusters.com","end":"2026-10-18T03:38:11.670Z","secs":6,"source":"chrome","title":"blurbusters.com/category/testufo/","ts":"2026-10-18T03:38:05.615Z","type":"web","url":"https://blurbusters.com/category/testufo/"});

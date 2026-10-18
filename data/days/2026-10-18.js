@@ -1,0 +1,17 @@
+__logEvent({"domain":"biblegateway.com","end":"2026-10-18T02:52:18.826Z","secs":7,"source":"chrome","title":"biblegateway.com/passage/?search=Philippians+2%3A9&version=NIV","ts":"2026-10-18T02:52:12.133Z","type":"web","url":"https://www.biblegateway.com/passage/?search=Philippians+2%3A9&version=NIV"});
+__logEvent({"type":"deletion","target":"2026-10-17T07:13:38.385Z|web","ts":"2026-10-18T02:58:47.989Z"});
+__logEvent({"type":"deletion","target":"2026-10-17T06:31:05.222Z|web","ts":"2026-10-18T02:58:53.506Z"});
+__logEvent({"domain":"github.com","end":"2026-10-18T02:58:35.649Z","secs":31,"source":"chrome","title":"Authorize GitGuardian","ts":"2026-10-18T02:58:05.032Z","type":"web","url":"https://github.com/login/oauth/authorize?client_id=Iv1.ec3c001966b4cc5a&state=e93c6418c4eaff768cad8d55e12d6ee5&redirect_uri=https://dashboard.gitguardian.com/api/v1/auth/user/github_login/callback/"});
+__logEvent({"type":"deletion","target":"2026-10-16T17:15:54.477Z|web","ts":"2026-10-18T02:59:34.280Z"});
+__logEvent({"type":"deletion","target":"2026-10-17T07:13:52.002Z|web","ts":"2026-10-18T02:59:44.065Z"});
+__logEvent({"type":"deletion","target":"2026-10-17T07:11:21.957Z|web","ts":"2026-10-18T02:59:46.117Z"});
+__logEvent({"type":"deletion","target":"2026-09-19T17:52:02.242Z|web","ts":"2026-10-18T02:59:47.597Z"});
+__logEvent({"type":"deletion","target":"2026-09-19T17:36:04.384Z|web","ts":"2026-10-18T02:59:49.356Z"});
+__logEvent({"type":"deletion","target":"2026-09-19T17:35:37.644Z|web","ts":"2026-10-18T02:59:51.230Z"});
+__logEvent({"type":"deletion","target":"2026-09-19T17:35:14.462Z|web","ts":"2026-10-18T02:59:52.147Z"});
+__logEvent({"type":"deletion","target":"2026-09-19T17:32:28.790Z|web","ts":"2026-10-18T02:59:52.797Z"});
+__logEvent({"type":"deletion","target":"2026-09-19T17:25:19.744Z|web","ts":"2026-10-18T02:59:53.472Z"});
+__logEvent({"type":"deletion","target":"2026-08-31T05:22:28.874Z|web","ts":"2026-10-18T02:59:54.214Z"});
+__logEvent({"type":"deletion","target":"2026-08-02T06:17:13.110Z|web","ts":"2026-10-18T02:59:55.747Z"});
+__logEvent({"domain":"github.com","end":"2026-10-18T03:01:42.014Z","secs":11,"source":"chrome","title":"TheRealMarcusChiu (Marcus Chiu) / September 2026","ts":"2026-10-18T03:01:31.434Z","type":"web","url":"https://github.com/TheRealMarcusChiu"});
+__logEvent({"domain":"github.com","end":"2026-10-18T03:02:12.972Z","secs":29,"source":"chrome","title":"TheRealMarcusChiu (Marcus Chiu) / August 2026","ts":"2026-10-18T03:01:43.922Z","type":"web","url":"https://github.com/TheRealMarcusChiu?tab=overview&from=2026-08-01&to=2026-08-31"});

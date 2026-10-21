@@ -1,0 +1,2 @@
+__logEvent({"domain":"roadmap.sh","end":"2026-10-21T00:37:06.334Z","secs":17,"source":"chrome","title":"roadmap.sh","ts":"2026-10-21T00:36:49.582Z","type":"web","url":"https://roadmap.sh/"});
+__logEvent({"domain":"roadmap.sh","end":"2026-10-21T00:37:22.811Z","secs":16,"source":"chrome","title":"Vibe Coding","ts":"2026-10-21T00:37:06.334Z","type":"web","url":"https://roadmap.sh/vibe-coding"});

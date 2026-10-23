@@ -53,3 +53,4 @@
 {"domain":"imdb.com","end":"2026-10-23T07:08:23.712Z","secs":23,"source":"chrome","title":"The Descent (2005) - IMDb","ts":"2026-10-23T07:08:00.522Z","type":"web","url":"https://www.imdb.com/title/tt0435625"}
 {"domain":"imdb.com","end":"2026-10-23T07:09:04.920Z","secs":19,"source":"chrome","title":"imdb.com/title/tt0857191","ts":"2026-10-23T07:08:46.400Z","type":"web","url":"https://www.imdb.com/title/tt0857191"}
 {"domain":"github.com","end":"2026-10-23T08:12:49.669Z","secs":40,"source":"chrome","title":"DietrichGebert/ponytail: Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.","ts":"2026-10-23T08:12:09.890Z","type":"web","url":"https://github.com/DietrichGebert/ponytail"}
+{"domain":"cariadlloyd.com","end":"2026-10-23T08:31:17.722Z","secs":8,"source":"chrome","title":"cariadlloyd.com/griefcast","ts":"2026-10-23T08:31:09.412Z","type":"web","url":"https://cariadlloyd.com/griefcast"}

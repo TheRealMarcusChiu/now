@@ -1,0 +1,3 @@
+__logEvent({"domain":"jobs.lever.co","end":"2026-10-25T01:09:45.865Z","secs":37,"source":"chrome","title":"jobs.lever.co/shieldai","ts":"2026-10-25T01:09:08.665Z","type":"web","url":"https://jobs.lever.co/shieldai"});
+__logEvent({"data":{"domain":"jobs.lever.co","end":"2026-10-25T01:10:30.578Z","secs":42,"source":"chrome","title":"Shield AI","ts":"2026-10-25T01:09:08.665Z","type":"web","url":"https://jobs.lever.co/shieldai"},"target":"2026-10-25T01:09:08.665Z|web","ts":"2026-10-25T01:10:30.578Z","type":"revision"});
+__logEvent({"domain":"findwhocallsyou.com","end":"2026-10-25T01:15:19.140Z","secs":8,"source":"chrome","title":"findwhocallsyou.com/2708942318","ts":"2026-10-25T01:15:11.268Z","type":"web","url":"https://findwhocallsyou.com/2708942318"});

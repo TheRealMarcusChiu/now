@@ -18,3 +18,5 @@
 {"domain":"block.xyz","end":"2026-10-26T15:16:50.171Z","secs":7,"source":"chrome","title":"block.xyz/dessa","ts":"2026-10-26T15:16:43.025Z","type":"web","url":"https://block.xyz/dessa"}
 {"data":{"domain":"block.xyz","end":"2026-10-26T15:17:14.483Z","secs":26,"source":"chrome","title":"block.xyz/dessa","ts":"2026-10-26T15:16:43.025Z","type":"web","url":"https://block.xyz/dessa"},"target":"2026-10-26T15:16:43.025Z|web","ts":"2026-10-26T15:17:14.483Z","type":"revision"}
 {"domain":"tinypng.com","end":"2026-10-26T16:37:30.514Z","secs":17,"source":"chrome","title":"tinypng.com","ts":"2026-10-26T16:37:13.083Z","type":"web","url":"https://tinypng.com/"}
+{"domain":"cve.org","end":"2026-10-26T17:31:46.140Z","secs":32,"source":"chrome","title":"CVE Record: CVE-2026-97229","ts":"2026-10-26T17:31:14.412Z","type":"web","url":"https://www.cve.org/CVERecord?id=CVE-2026-97229"}
+{"domain":"cve.org","end":"2026-10-26T17:32:26.106Z","secs":9,"source":"chrome","title":"CVE Record: CVE-2026-115893","ts":"2026-10-26T17:32:16.958Z","type":"web","url":"https://www.cve.org/CVERecord?id=CVE-2026-115893"}

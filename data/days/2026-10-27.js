@@ -1,0 +1,1 @@
+__logEvent({"data":{"domain":"microcenter.com","end":"2026-10-27T00:14:30.562Z","secs":17,"source":"chrome","title":"5090 : Micro Center","ts":"2026-10-26T23:53:44.384Z","type":"web","url":"https://www.microcenter.com/search/search_results.aspx?N=&cat=&Ntt=5090&searchButton=search"},"target":"2026-10-26T23:53:44.384Z|web","ts":"2026-10-27T00:14:30.562Z","type":"revision"});

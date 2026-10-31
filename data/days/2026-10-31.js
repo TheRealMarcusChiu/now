@@ -17,3 +17,5 @@ __logEvent({"data":{"domain":"fprime.jpl.nasa.gov","end":"2026-10-31T04:50:29.48
 __logEvent({"domain":"community-scripts.org","end":"2026-10-31T05:21:20.025Z","secs":5,"source":"chrome","title":"community-scripts.org","ts":"2026-10-31T05:21:14.979Z","type":"web","url":"https://community-scripts.org/"});
 __logEvent({"domain":"discover.com","end":"2026-10-31T05:47:38.395Z","secs":32,"source":"chrome","title":"discover.com","ts":"2026-10-31T05:47:06.170Z","type":"web","url":"https://www.discover.com/"});
 __logEvent({"domain":"chase.com","end":"2026-10-31T05:52:26.074Z","secs":7,"source":"chrome","title":"chase.com","ts":"2026-10-31T05:52:19.244Z","type":"web","url":"https://www.chase.com/"});
+__logEvent({"domain":"cindori.com","end":"2026-10-31T06:21:46.727Z","secs":10,"source":"chrome","title":"Backdrop: Live Wallpapers for Mac Desktop & Lock Screen","ts":"2026-10-31T06:21:36.633Z","type":"web","url":"https://cindori.com/backdrop"});
+__logEvent({"domain":"cindori.com","end":"2026-10-31T06:21:56.586Z","secs":10,"source":"chrome","title":"Download Backdrop — Cindori","ts":"2026-10-31T06:21:46.727Z","type":"web","url":"https://cindori.com/backdrop/download"});

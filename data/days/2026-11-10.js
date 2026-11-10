@@ -45,3 +45,12 @@ __logEvent({"data":{"domain":"shop.mt-viki.com","end":"2026-11-10T03:40:52.611Z"
 __logEvent({"data":{"domain":"github.com","end":"2026-11-10T03:55:30.546Z","secs":104,"source":"chrome","title":"pikvm/pikvm: Open and inexpensive DIY IP-KVM based on Raspberry Pi","ts":"2026-11-10T03:38:48.253Z","type":"web","url":"https://github.com/pikvm/pikvm"},"target":"2026-11-10T03:38:48.253Z|web","ts":"2026-11-10T03:55:30.546Z","type":"revision"});
 __logEvent({"domain":"github.com","end":"2026-11-10T03:55:35.436Z","secs":5,"source":"chrome","title":"github.com/notifications","ts":"2026-11-10T03:55:30.546Z","type":"web","url":"https://github.com/notifications"});
 __logEvent({"domain":"aarnphm.xyz","end":"2026-11-10T04:03:49.330Z","secs":90,"source":"chrome","title":"aarnphm.xyz/vibes","ts":"2026-11-10T04:02:19.123Z","type":"web","url":"https://aarnphm.xyz/vibes"});
+__logEvent({"type":"deletion","target":"2026-11-10T04:02:19.123Z|web","ts":"2026-11-10T04:27:37.324Z"});
+__logEvent({"type":"deletion","target":"2026-11-10T04:02:19.123Z|web","ts":"2026-11-10T04:27:45.747Z"});
+__logEvent({"type":"deletion","target":"2026-10-12T20:32:24.271Z|web","ts":"2026-11-10T04:27:50.632Z"});
+__logEvent({"type":"deletion","target":"2026-08-26T18:39:26.754Z|web","ts":"2026-11-10T04:27:51.805Z"});
+__logEvent({"type":"deletion","target":"2026-08-25T15:08:31.355Z|web","ts":"2026-11-10T04:27:52.514Z"});
+__logEvent({"type":"deletion","target":"2026-08-11T02:58:54.495Z|web","ts":"2026-11-10T04:27:53.190Z"});
+__logEvent({"type":"deletion","target":"2026-08-06T18:52:04.477Z|web","ts":"2026-11-10T04:27:54.647Z"});
+__logEvent({"type":"deletion","target":"2026-08-05T17:05:39.035Z|web","ts":"2026-11-10T04:27:55.931Z"});
+__logEvent({"type":"deletion","target":"2026-07-24T16:27:20.293Z|web","ts":"2026-11-10T04:28:51.101Z"});

@@ -1,0 +1,1 @@
+__logEvent({"domain":"biblehub.com","end":"2026-11-19T01:12:16.367Z","secs":10,"source":"chrome","title":"Matthew 19:6 So they are no longer two, but one flesh. Therefore what God has joined together, let man not separate.\"","ts":"2026-11-19T01:12:06.013Z","type":"web","url":"https://biblehub.com/matthew/19-6.htm"});

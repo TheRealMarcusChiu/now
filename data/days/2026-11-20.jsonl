@@ -5,3 +5,4 @@
 {"domain":"endoflife.date","end":"2026-11-20T19:05:17.372Z","secs":14,"source":"chrome","title":"Home | endoflife.date","ts":"2026-11-20T19:05:03.402Z","type":"web","url":"https://endoflife.date/"}
 {"data":{"domain":"endoflife.date","end":"2026-11-20T19:05:25.465Z","secs":19,"source":"chrome","title":"Home | endoflife.date","ts":"2026-11-20T19:05:03.402Z","type":"web","url":"https://endoflife.date/"},"target":"2026-11-20T19:05:03.402Z|web","ts":"2026-11-20T19:05:25.465Z","type":"revision"}
 {"domain":"github.com","end":"2026-11-20T19:05:33.235Z","secs":8,"source":"chrome","title":"github.com/endoflife-date/endoflife.date","ts":"2026-11-20T19:05:25.465Z","type":"web","url":"https://github.com/endoflife-date/endoflife.date"}
+{"domain":"hacker-tube.org","end":"2026-11-20T21:49:05.589Z","secs":5,"source":"chrome","title":"Videos Shared on Hacker News | HackerTube","ts":"2026-11-20T21:49:00.720Z","type":"web","url":"https://hacker-tube.org/videos"}

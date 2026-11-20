@@ -1,2 +1,3 @@
 __logEvent({"domain":"mythicspoiler.com","end":"2026-11-20T03:59:12.880Z","secs":9,"source":"chrome","title":"STAR TREK | MythicSpoiler.com","ts":"2026-11-20T03:59:03.532Z","type":"web","url":"https://mythicspoiler.com/"});
 __logEvent({"domain":"mythicspoiler.com","end":"2026-11-20T03:59:31.829Z","secs":19,"source":"chrome","title":"mythicspoiler.com/newspoilers.html","ts":"2026-11-20T03:59:12.880Z","type":"web","url":"https://mythicspoiler.com/newspoilers.html"});
+__logEvent({"domain":"biblegateway.com","end":"2026-11-20T04:10:16.149Z","secs":27,"source":"chrome","title":"biblegateway.com","ts":"2026-11-20T04:09:49.237Z","type":"web","url":"https://www.biblegateway.com/"});

@@ -1,0 +1,1 @@
+__logEvent({"domain":"fs.blog","end":"2026-11-25T02:43:25.475Z","secs":7,"source":"chrome","title":"Hunter S. Thompson's Letter on Finding Purpose | Life-Changing Advice","ts":"2026-11-25T02:43:17.985Z","type":"web","url":"https://fs.blog/hunter-s-thompson-to-hume-logan/"});

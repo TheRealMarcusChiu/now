@@ -1,0 +1,1 @@
+__logEvent({"domain":"facebook.com","end":"2026-11-26T06:43:07.010Z","secs":29,"source":"chrome","title":"Facebook","ts":"2026-11-26T06:42:38.187Z","type":"web","url":"https://www.facebook.com/reel/1843385003343538"});
